@@ -5,8 +5,20 @@ date: "3-26-18"
 output: github_document
 ---
 
+```{r - load_packages}
+library(tidyverse)
+library(broom)
+library(infer)
+```
+
+
 ## Section 1. Introduction
 
 ## Section 2. Data analysis plan
 
 ## Section 3. Data
+```{r - data}
+glimpse()
+
+```
+
