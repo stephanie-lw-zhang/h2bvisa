@@ -5,6 +5,12 @@ date: "3-26-18"
 output: github_document
 ---
 
+```{r load-packages}
+install.packages("tidyverse")
+library(tidyverse)
+```
+
+
 ## Section 1. Introduction
 Our general research question is: what factors make companies more likely to get successfully obtain H2-B visas? 
 
@@ -53,5 +59,14 @@ organization_flag: Various types of organizations — including sole employers a
 is_duplicate: True/False/null: This derived value will be True — indicating that this row corresponds a sub-application of a joint employer's "master application" — if (a) visa_type is "H-2A", (b) the organization_flag is blank, and (c) comes from fiscal year 2008 or later. H-2A data from FY 2006 and FY 2007 do not contain a organization_flag field. For these records, and H-2B records, is_duplicate will be null.
 
 ## Section 2. Data analysis plan
+
+Our outcome variable is whether an H-2B Visa certification request made by a company is successful. Our explanatory variables are the state in which the request made, the type of work the request was made for, by DOT Code, the number of workers requested, the time of the year the request was made, and the salary for workers. 
+
+The comparison groups will include different states, which could be combined into regions, different occupations, such as agricultural or service, the seasons in which a request was made, the salary of the workers, and whether the workers are recieving benefits. 
+
+```{r join-data}
+h2b <- read_csv("data/H-2B_FY2000csv.html")
+```
+
 
 ## Section 3. Data
