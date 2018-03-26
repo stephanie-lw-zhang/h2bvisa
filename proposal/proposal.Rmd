@@ -31,14 +31,16 @@ The comparison groups will include different states, which could be combined int
 We will primarily use hypothesis testing to determine variable independence. In other words, we will use hypothesis tests to determine if there is a statistically significant difference in the proportion of Visa applicants that get accepted. We will also make a linear model to predict whether or not certain cases would or wouldn't be granted a Visa. In doing this, we will used Cross Validation to confirm that our model would be a good predictor in situations outside of our data.  
 
 ```{r join-data}
-h2b <- read_excel("data/H-2B_FY2008.csv") %>%
-  full_join(read_excel("data/H-2B_FY2009.csv"))
-
+h2b <- read_csv("data/H-2B_FY2008.csv") %>%
+  full_join(read_csv("data/H-2B_FY2009.csv")) %>%
+  full_join(read_csv("data/H-2B_FY2010.csv")) %>%
+  full_join(read_csv("data/H-2B_FY2011.csv")) %>%
+  full_join(read_csv("data/H-2B_FY2012.csv")) 
 ```
 
 
 ## Section 3. Data
 ```{r - data}
-
+glimpse(h2b)
 ```
 
