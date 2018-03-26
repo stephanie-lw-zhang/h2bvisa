@@ -1,7 +1,7 @@
 ---
-title: "PROJECT TITLE"
-author: "NAME HERE"
-date: "TODAY'S DATE"
+title: "Analyzing H2B Data"
+author: "24-7"
+date: "3-26-18"
 output: github_document
 ---
 
