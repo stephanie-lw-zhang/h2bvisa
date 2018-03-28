@@ -14,7 +14,7 @@ For context, an H2-B visa is a temporary work visa for foreign workers with a jo
 
 The dataset we are using is from the Department of Labor's Office of Foreign Labor Certification (OFLC). The data comes from H-2B applications that have been received and entered into the Department of Labor Tracking system. Specific information in the dataset about the employers was gathered through the foreign labor certification applications employers submitted. Data relating to wage levels was provided by the Bureau of Labor Statistics' Occupational Employment Statistics Program.
 
-The data is sorted by fiscal year, from 2000 to 2013. Each observation is a different petition filed by an employer. The variables in the dataset are as follows: CASE\_NUMBER, DECISION\_DATE, NPC\_SUBMITTED\_DATE, CASE\_STATUS, VISA\_CLASS, ALIEN\_WORK\_STATE, CERTIFICATION\_BEGIN\_DATE, CERTIFICATION\_END\_DATE, EMPLOYER\_NAME, EMPLOYER\_ADDRESS1, EMPLOYER\_ADDRESS2, EMPLOYER\_CITY, EMPLOYER\_STATE, EMPLOYER\_POSTAL\_CODE, AGENT\_ATTORNEY\_NAME, AGENT\_ATTORNEY\_CITY, AGENT\_ATTORNEY\_STATE, SOC\_CODE, SOC\_NAME, JOB\_TITLE, NBR\_WORKERS\_CERTIFIED, PREVIALING\_WAGE (spelling error present in data), PW\_UNIT\_OF\_PAY, BASIC\_RATE\_OF\_PAY, BASIC\_UNIT\_OF\_PAY
+The data is sorted by fiscal year, from 2008 to 2013. Each observation is a different petition filed by an employer. The variables in the dataset are as follows: CASE\_NUMBER, DECISION\_DATE, NPC\_SUBMITTED\_DATE, CASE\_STATUS, VISA\_CLASS, ALIEN\_WORK\_STATE, CERTIFICATION\_BEGIN\_DATE, CERTIFICATION\_END\_DATE, EMPLOYER\_NAME, EMPLOYER\_ADDRESS1, EMPLOYER\_ADDRESS2, EMPLOYER\_CITY, EMPLOYER\_STATE, EMPLOYER\_POSTAL\_CODE, AGENT\_ATTORNEY\_NAME, AGENT\_ATTORNEY\_CITY, AGENT\_ATTORNEY\_STATE, SOC\_CODE, SOC\_NAME, JOB\_TITLE, NBR\_WORKERS\_CERTIFIED, PREVIALING\_WAGE (spelling error present in data), PW\_UNIT\_OF\_PAY, BASIC\_RATE\_OF\_PAY, BASIC\_UNIT\_OF\_PAY
 
 Section 2. Data analysis plan
 -----------------------------
@@ -30,13 +30,17 @@ We will primarily use hypothesis testing to determine variable independence. In 
 ![](proposal_files/figure-markdown_github/salary-1.png)
 
     ## # A tibble: 5 x 8
-    ##   CASE_STATUS         min    q1 median    q3  mean    sd    max
-    ##   <chr>             <dbl> <dbl>  <dbl> <dbl> <dbl> <dbl>  <dbl>
-    ## 1 CERTIFIED          5.85  7.90   8.66  9.86 11.4   26.3 575   
-    ## 2 DENIED             0     8.00   9.28 12.5  12.4   26.3 900   
-    ## 3 FINAL REVIEW      40.0  40.0   40.0  40.0  40.0   NA    40.0 
-    ## 4 PARTIAL CERTIFIED  5.52  8.00   8.63  9.54  9.39  11.0 381   
-    ## 5 WITHDRAWN          7.00  7.00   7.00  7.00  7.00  NA     7.00
+    ##   CASE_STATUS         min    q1 median    q3    max  mean    sd
+    ##   <chr>             <dbl> <dbl>  <dbl> <dbl>  <dbl> <dbl> <dbl>
+    ## 1 CERTIFIED          5.85  7.90   8.66  9.86 575    11.4   26.3
+    ## 2 DENIED             0     8.00   9.28 12.5  900    12.4   26.3
+    ## 3 FINAL REVIEW      40.0  40.0   40.0  40.0   40.0  40.0   NA  
+    ## 4 PARTIAL CERTIFIED  5.52  8.00   8.63  9.54 381     9.39  11.0
+    ## 5 WITHDRAWN          7.00  7.00   7.00  7.00   7.00  7.00  NA
+
+Our preliminary visualizations and summary statistics show that both salary and the number of workers certified in each request are both unimodal and strongly right skewed. For salary especially, there are many outliers, which appear to be mistakes, because it's unreasonable to expect anyone to be making thousands of dollars per hour. Note that these visualizations and statistics include only those who's wage is listed per hour, which is the large majority of applications. In our full analysis, we will convert the other units, like weekly or monthly to hours.
+
+The initial summry statistics don't show a clear difference in the spreads of salaries between visa applications that are certified, denied, and partially certified. The quartiles and medians for each are fairly similar. Means and standard deviations don't appear to be useful for analyzing salaries because of skew.
 
 Section 3. Data
 ---------------

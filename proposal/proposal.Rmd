@@ -20,7 +20,7 @@ For context, an H2-B visa is a temporary work visa for foreign workers with a jo
 
 The dataset we are using is from the Department of Labor's Office of Foreign Labor Certification (OFLC). The data comes from H-2B applications that have been received and entered into the Department of Labor Tracking system. Specific information in the dataset about the employers was gathered through the foreign labor certification applications employers submitted. Data relating to wage levels was provided by the Bureau of Labor Statistics' Occupational Employment Statistics Program. 
 
-The data is sorted by fiscal year, from 2000 to 2013. Each observation is a different petition filed by an employer. The variables in the dataset are as follows: CASE_NUMBER, DECISION_DATE, NPC_SUBMITTED_DATE, CASE_STATUS, VISA_CLASS, ALIEN_WORK_STATE, CERTIFICATION_BEGIN_DATE, CERTIFICATION_END_DATE, EMPLOYER_NAME, EMPLOYER_ADDRESS1, EMPLOYER_ADDRESS2, EMPLOYER_CITY, EMPLOYER_STATE, EMPLOYER_POSTAL_CODE, AGENT_ATTORNEY_NAME, AGENT_ATTORNEY_CITY, AGENT_ATTORNEY_STATE, SOC_CODE, SOC_NAME, JOB_TITLE, NBR_WORKERS_CERTIFIED, PREVIALING_WAGE (spelling error present in data), PW_UNIT_OF_PAY, BASIC_RATE_OF_PAY, BASIC_UNIT_OF_PAY
+The data is sorted by fiscal year, from 2008 to 2013. Each observation is a different petition filed by an employer. The variables in the dataset are as follows: CASE_NUMBER, DECISION_DATE, NPC_SUBMITTED_DATE, CASE_STATUS, VISA_CLASS, ALIEN_WORK_STATE, CERTIFICATION_BEGIN_DATE, CERTIFICATION_END_DATE, EMPLOYER_NAME, EMPLOYER_ADDRESS1, EMPLOYER_ADDRESS2, EMPLOYER_CITY, EMPLOYER_STATE, EMPLOYER_POSTAL_CODE, AGENT_ATTORNEY_NAME, AGENT_ATTORNEY_CITY, AGENT_ATTORNEY_STATE, SOC_CODE, SOC_NAME, JOB_TITLE, NBR_WORKERS_CERTIFIED, PREVIALING_WAGE (spelling error present in data), PW_UNIT_OF_PAY, BASIC_RATE_OF_PAY, BASIC_UNIT_OF_PAY
 
 ## Section 2. Data analysis plan
 
@@ -71,11 +71,14 @@ h2b %>%
     q1 = quantile(BASIC_RATE_OF_PAY, 0.25),
     median = median(BASIC_RATE_OF_PAY),
     q3 = quantile(BASIC_RATE_OF_PAY, 0.75),
+    max = max(BASIC_RATE_OF_PAY),
     mean = mean(BASIC_RATE_OF_PAY),
-    sd = sd(BASIC_RATE_OF_PAY),
-    max = max(BASIC_RATE_OF_PAY))
+    sd = sd(BASIC_RATE_OF_PAY))
 ```
 
+Our preliminary visualizations and summary statistics show that both salary and the number of workers certified in each request are both unimodal and strongly right skewed. For salary especially, there are many outliers, which appear to be mistakes, because it's unreasonable to expect anyone to be making thousands of dollars per hour. Note that these visualizations and statistics include only those who's wage is listed per hour, which is the large majority of applications. In our full analysis, we will convert the other units, like weekly or monthly to hours.
+
+The initial summry statistics don't show a clear difference in the spreads of salaries between visa applications that are certified, denied, and partially certified. The quartiles and medians for each are fairly similar. Means and standard deviations don't appear to be useful for analyzing salaries because of skew. 
 
 ## Section 3. Data
 ```{r data, echo = FALSE}
