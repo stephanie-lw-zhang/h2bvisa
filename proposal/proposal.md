@@ -3,33 +3,7 @@ Analyzing H2B Data
 24-7
 3-26-18
 
-``` r
-install.packages("tidyverse")
-```
-
-    ## Installing package into '/home/rstudio-user/R/x86_64-pc-linux-gnu-library/3.4'
-    ## (as 'lib' is unspecified)
-
-``` r
-library(tidyverse)
-```
-
     ## Warning: running command 'timedatectl' had status 1
-
-    ## ── Attaching packages ───────────────────────────────── tidyverse 1.2.1 ──
-
-    ## ✔ ggplot2 2.2.1     ✔ purrr   0.2.4
-    ## ✔ tibble  1.4.1     ✔ dplyr   0.7.4
-    ## ✔ tidyr   0.7.2     ✔ stringr 1.2.0
-    ## ✔ readr   1.1.1     ✔ forcats 0.2.0
-
-    ## ── Conflicts ──────────────────────────────────── tidyverse_conflicts() ──
-    ## ✖ dplyr::filter() masks stats::filter()
-    ## ✖ dplyr::lag()    masks stats::lag()
-
-``` r
-library(readxl)
-```
 
 Section 1. Introduction
 -----------------------
@@ -51,88 +25,21 @@ The comparison groups will include different states, which could be combined int
 
 We will primarily use hypothesis testing to determine variable independence. In other words, we will use hypothesis tests to determine if there is a statistically significant difference in the proportion of Visa applicants that get accepted. We will also make a linear model to predict whether or not certain cases would or wouldn't be granted a Visa. In doing this, we will used Cross Validation to confirm that our model would be a good predictor in situations outside of our data.
 
-``` r
-h2b <- read_csv("data/H-2B_FY2008.csv") %>%
-  full_join(read_csv("data/H-2B_FY2009.csv")) %>%
-  full_join(read_csv("data/H-2B_FY2010.csv")) %>%
-  full_join(read_csv("data/H-2B_FY2011.csv")) %>%
-  full_join(read_csv("data/H-2B_FY2012.csv")) 
-```
+![](proposal_files/figure-markdown_github/workers-1.png)
 
-    ## Parsed with column specification:
-    ## cols(
-    ##   .default = col_character(),
-    ##   NBR_WORKERS_CERTIFIED = col_integer(),
-    ##   PREVAILING_WAGE = col_double(),
-    ##   BASIC_RATE_OF_PAY = col_double()
-    ## )
+![](proposal_files/figure-markdown_github/salary-1.png)
 
-    ## See spec(...) for full column specifications.
-
-    ## Parsed with column specification:
-    ## cols(
-    ##   .default = col_character(),
-    ##   NBR_WORKERS_CERTIFIED = col_integer(),
-    ##   PREVAILING_WAGE = col_double(),
-    ##   BASIC_RATE_OF_PAY = col_double()
-    ## )
-
-    ## See spec(...) for full column specifications.
-
-    ## Joining, by = c("CASE_NO", "DECISION_DATE", "NPC_SUBMITTED_DATE", "CASE_STATUS", "ALIEN_WORK_STATE", "CERTIFICATION_BEGIN_DATE", "CERTIFICATION_END_DATE", "EMPLOYER_NAME", "EMPLOYER_ADDRESS1", "EMPLOYER_ADDRESS2", "EMPLOYER_CITY", "EMPLOYER_STATE", "EMPLOYER_POSTAL_CODE", "AGENT_ATTORNEY_NAME", "AGENT_ATTORNEY_ADDRESS", "AGENT_ATTORNEY_CITY", "AGENT_ATTORNEY_STATE", "JOB_TITLE", "NBR_WORKERS_CERTIFIED", "PREVAILING_WAGE", "PW_UNIT_OF_PAY", "BASIC_RATE_OF_PAY", "BASIC_UNIT_OF_PAY")
-
-    ## Parsed with column specification:
-    ## cols(
-    ##   .default = col_character(),
-    ##   NBR_WORKERS_REQUESTED = col_integer(),
-    ##   NBR_WORKERS_CERTIFIED = col_integer(),
-    ##   PREVAILING_WAGE = col_double(),
-    ##   BASIC_RATE_OF_PAY = col_double()
-    ## )
-
-    ## See spec(...) for full column specifications.
-
-    ## Joining, by = c("CASE_NO", "DECISION_DATE", "NPC_SUBMITTED_DATE", "CASE_STATUS", "ALIEN_WORK_STATE", "CERTIFICATION_BEGIN_DATE", "CERTIFICATION_END_DATE", "EMPLOYER_NAME", "EMPLOYER_ADDRESS1", "EMPLOYER_ADDRESS2", "EMPLOYER_CITY", "EMPLOYER_STATE", "EMPLOYER_POSTAL_CODE", "AGENT_ATTORNEY_NAME", "AGENT_ATTORNEY_CITY", "AGENT_ATTORNEY_STATE", "JOB_TITLE", "NBR_WORKERS_CERTIFIED", "PREVAILING_WAGE", "PW_UNIT_OF_PAY", "BASIC_RATE_OF_PAY", "BASIC_UNIT_OF_PAY")
-
-    ## Parsed with column specification:
-    ## cols(
-    ##   .default = col_character(),
-    ##   SOC_CODE = col_integer(),
-    ##   NBR_WORKERS_REQUESTED = col_integer(),
-    ##   NBR_WORKERS_CERTIFIED = col_integer(),
-    ##   PREVAILING_WAGE = col_double(),
-    ##   BASIC_RATE_OF_PAY = col_double()
-    ## )
-
-    ## See spec(...) for full column specifications.
-
-    ## Joining, by = c("CASE_NO", "DECISION_DATE", "NPC_SUBMITTED_DATE", "CASE_STATUS", "ALIEN_WORK_STATE", "CERTIFICATION_BEGIN_DATE", "CERTIFICATION_END_DATE", "EMPLOYER_NAME", "EMPLOYER_ADDRESS1", "EMPLOYER_ADDRESS2", "EMPLOYER_CITY", "EMPLOYER_STATE", "EMPLOYER_POSTAL_CODE", "AGENT_ATTORNEY_NAME", "AGENT_ATTORNEY_CITY", "AGENT_ATTORNEY_STATE", "JOB_TITLE", "NBR_WORKERS_CERTIFIED", "PREVAILING_WAGE", "PW_UNIT_OF_PAY", "BASIC_RATE_OF_PAY", "BASIC_UNIT_OF_PAY", "DOT_OCCUPATIONAL_CODE", "NBR_WORKERS_REQUESTED")
-
-    ## Parsed with column specification:
-    ## cols(
-    ##   .default = col_character(),
-    ##   SOC_CODE = col_integer(),
-    ##   NBR_WORKERS_REQUESTED = col_integer(),
-    ##   NBR_WORKERS_CERTIFIED = col_integer(),
-    ##   PREVAILING_WAGE = col_double(),
-    ##   BASIC_RATE_OF_PAY = col_double()
-    ## )
-
-    ## See spec(...) for full column specifications.
-
-    ## Joining, by = c("CASE_NO", "DECISION_DATE", "NPC_SUBMITTED_DATE", "CASE_STATUS", "ALIEN_WORK_STATE", "CERTIFICATION_BEGIN_DATE", "CERTIFICATION_END_DATE", "EMPLOYER_NAME", "EMPLOYER_ADDRESS1", "EMPLOYER_ADDRESS2", "EMPLOYER_CITY", "EMPLOYER_STATE", "EMPLOYER_POSTAL_CODE", "AGENT_ATTORNEY_NAME", "AGENT_ATTORNEY_CITY", "AGENT_ATTORNEY_STATE", "JOB_TITLE", "NBR_WORKERS_CERTIFIED", "PREVAILING_WAGE", "PW_UNIT_OF_PAY", "BASIC_RATE_OF_PAY", "BASIC_UNIT_OF_PAY", "DOT_OCCUPATIONAL_CODE", "NBR_WORKERS_REQUESTED", "VISA_CLASS", "DOT_NAME", "SOC_CODE", "SOC_NAME")
-
-``` r
-h2b <- h2b %>%
-  select(CASE_NO, DECISION_DATE, NPC_SUBMITTED_DATE, CASE_STATUS, ALIEN_WORK_STATE, CERTIFICATION_BEGIN_DATE, CERTIFICATION_END_DATE, EMPLOYER_CITY, EMPLOYER_STATE, EMPLOYER_POSTAL_CODE, AGENT_ATTORNEY_CITY, AGENT_ATTORNEY_STATE, JOB_TITLE, NBR_WORKERS_CERTIFIED, BASIC_RATE_OF_PAY, BASIC_UNIT_OF_PAY, DOT_OCCUPATIONAL_CODE, NBR_WORKERS_REQUESTED, DOT_NAME, SOC_CODE, SOC_NAME)
-```
+    ## # A tibble: 5 x 8
+    ##   CASE_STATUS         min    q1 median    q3  mean    sd    max
+    ##   <chr>             <dbl> <dbl>  <dbl> <dbl> <dbl> <dbl>  <dbl>
+    ## 1 CERTIFIED          5.85  7.90   8.66  9.86 11.4   26.3 575   
+    ## 2 DENIED             0     8.00   9.28 12.5  12.4   26.3 900   
+    ## 3 FINAL REVIEW      40.0  40.0   40.0  40.0  40.0   NA    40.0 
+    ## 4 PARTIAL CERTIFIED  5.52  8.00   8.63  9.54  9.39  11.0 381   
+    ## 5 WITHDRAWN          7.00  7.00   7.00  7.00  7.00  NA     7.00
 
 Section 3. Data
 ---------------
-
-``` r
-glimpse(h2b)
-```
 
     ## Observations: 31,422
     ## Variables: 21

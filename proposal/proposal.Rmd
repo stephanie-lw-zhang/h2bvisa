@@ -5,7 +5,7 @@ date: "3-26-18"
 output: github_document
 ---
 
-```{r - load_packages}
+```{r load-packages, echo=FALSE, message=FALSE}
 install.packages("tidyverse")
 library(tidyverse)
 library(readxl)
@@ -30,7 +30,7 @@ The comparison groups will include different states, which could be combined int
 
 We will primarily use hypothesis testing to determine variable independence. In other words, we will use hypothesis tests to determine if there is a statistically significant difference in the proportion of Visa applicants that get accepted. We will also make a linear model to predict whether or not certain cases would or wouldn't be granted a Visa. In doing this, we will used Cross Validation to confirm that our model would be a good predictor in situations outside of our data.  
 
-```{r join-data}
+```{r join-data, echo = FALSE, message=FALSE}
 h2b <- read_csv("data/H-2B_FY2008.csv") %>%
   full_join(read_csv("data/H-2B_FY2009.csv")) %>%
   full_join(read_csv("data/H-2B_FY2010.csv")) %>%
@@ -41,9 +41,44 @@ h2b <- h2b %>%
   select(CASE_NO, DECISION_DATE, NPC_SUBMITTED_DATE, CASE_STATUS, ALIEN_WORK_STATE, CERTIFICATION_BEGIN_DATE, CERTIFICATION_END_DATE, EMPLOYER_CITY, EMPLOYER_STATE, EMPLOYER_POSTAL_CODE, AGENT_ATTORNEY_CITY, AGENT_ATTORNEY_STATE, JOB_TITLE, NBR_WORKERS_CERTIFIED, BASIC_RATE_OF_PAY, BASIC_UNIT_OF_PAY, DOT_OCCUPATIONAL_CODE, NBR_WORKERS_REQUESTED, DOT_NAME, SOC_CODE, SOC_NAME)
 ```
 
+```{r workers, echo = FALSE}
+h2b %>%
+  filter(!is.na(NBR_WORKERS_CERTIFIED)) %>%
+  ggplot(mapping = aes(x = NBR_WORKERS_CERTIFIED)) +
+  geom_histogram(binwidth = 20) +
+  labs(title = "Number of workers certified", x = "# of Workers",
+       y = "Frequency") +
+  coord_cartesian(xlim = c(0, 300))
+```
+
+```{r salary, echo = FALSE}
+h2b %>%
+  filter(BASIC_UNIT_OF_PAY == "HR" & !is.na(BASIC_RATE_OF_PAY)) %>%
+  ggplot(mapping = aes(x = BASIC_RATE_OF_PAY)) +
+  geom_histogram(binwidth = 10) +
+  labs(title = "Hourly salary of workers", x = "Salary",
+       y = "Frequency") +
+  coord_cartesian(xlim = c(0, 100))
+```
+
+```{r salary-summary, echo = FALSE}
+h2b %>%
+  filter(BASIC_UNIT_OF_PAY == "HR" & 
+           !is.na(BASIC_RATE_OF_PAY)) %>%
+  filter(BASIC_RATE_OF_PAY < 1000) %>%
+  group_by(CASE_STATUS) %>%
+  summarise(min = min(BASIC_RATE_OF_PAY),
+    q1 = quantile(BASIC_RATE_OF_PAY, 0.25),
+    median = median(BASIC_RATE_OF_PAY),
+    q3 = quantile(BASIC_RATE_OF_PAY, 0.75),
+    mean = mean(BASIC_RATE_OF_PAY),
+    sd = sd(BASIC_RATE_OF_PAY),
+    max = max(BASIC_RATE_OF_PAY))
+```
+
 
 ## Section 3. Data
-```{r - data}
+```{r data, echo = FALSE}
 glimpse(h2b)
 ```
 
