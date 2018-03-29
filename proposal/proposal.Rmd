@@ -28,7 +28,9 @@ Our outcome variable is whether an H-2B Visa certification request made by a com
 
 The comparison groups will include different states, which could be combined into regions, different occupations, such as agricultural or service, the seasons in which a request was made, the salary of the workers, and whether the workers are recieving benefits. 
 
-We will primarily use hypothesis testing to determine variable independence. In other words, we will use hypothesis tests to determine if there is a statistically significant difference in the proportion of Visa applicants that get accepted. We will also make a linear model to predict whether or not certain cases would or wouldn't be granted a Visa. In doing this, we will used Cross Validation to confirm that our model would be a good predictor in situations outside of our data.  
+We will primarily use hypothesis testing to determine variable independence. In other words, we will use hypothesis tests to determine if there is a statistically significant difference in the proportion of Visa applicants that get accepted. We will also make a linear model to predict whether or not certain cases would or wouldn't be granted a Visa. In doing this, we will used Cross Validation to confirm that our model would be a good predictor in situations outside of our data. 
+
+When exploring the relationships between variables, p-values lower than .05 would indicate that whatever factor we were testing did have an impact on whether or not the Visa got accepted. For our linear model, if we were to use backwards selection, an decrease in the adjusted r-squared would indicate that the inclusion of said variable improves our model. 
 
 ```{r join-data}
 h2b <- read_csv("data/H-2B_FY2008.csv") %>%
