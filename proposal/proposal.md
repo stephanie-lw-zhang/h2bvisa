@@ -3,19 +3,9 @@ Analyzing H2B Data
 24-7
 3-26-18
 
-``` r
-install.packages("tidyverse")
-```
-
-    ## Installing package into '/home/rstudio-user/R/x86_64-pc-linux-gnu-library/3.4'
-    ## (as 'lib' is unspecified)
-
-``` r
-library(tidyverse)
-```
-
     ## Warning: running command 'timedatectl' had status 1
 
+<<<<<<< HEAD
     ## ── Attaching packages ───────────────────────────────────────────────────── tidyverse 1.2.1 ──
 
     ## ✔ ggplot2 2.2.1     ✔ purrr   0.2.4
@@ -31,6 +21,8 @@ library(tidyverse)
 library(readxl)
 ```
 
+=======
+>>>>>>> 029e306a34e6584c61ccdce7e47281049b9b8f88
 Section 1. Introduction
 -----------------------
 
@@ -40,7 +32,11 @@ For context, an H2-B visa is a temporary work visa for foreign workers with a jo
 
 The dataset we are using is from the Department of Labor's Office of Foreign Labor Certification (OFLC). The data comes from H-2B applications that have been received and entered into the Department of Labor Tracking system. Specific information in the dataset about the employers was gathered through the foreign labor certification applications employers submitted. Data relating to wage levels was provided by the Bureau of Labor Statistics' Occupational Employment Statistics Program.
 
+<<<<<<< HEAD
 The data is sorted by fiscal year, from 2000 to 2012. Each observation is a different petition filed by an employer. The variables in the dataset are as follows: CASE\_NO, DECISION\_DATE, NPC\_SUBMITTED\_DATE, CASE\_STATUS, ALIEN\_WORK\_STATE, CERTIFICATION\_BEGIN\_DATE, CERTIFICATION\_END\_DATE, EMPLOYER\_CITY, EMPLOYER\_STATE, EMPLOYER\_POSTAL\_CODE, AGENT\_ATTORNEY\_CITY, AGENT\_ATTORNEY\_STATE, JOB\_TITLE, NBR\_WORKERS\_CERTIFIED, BASIC\_RATE\_OF\_PAY, BASIC\_UNIT\_OF\_PAY, DOT\_OCCUPATIONAL\_CODE, NBR\_WORKERS\_REQUESTED, DOT\_NAME, SOC\_CODE, SOC\_NAME
+=======
+The data is sorted by fiscal year, from 2008 to 2013. Each observation is a different petition filed by an employer. The variables in the dataset are as follows: CASE\_NUMBER, DECISION\_DATE, NPC\_SUBMITTED\_DATE, CASE\_STATUS, VISA\_CLASS, ALIEN\_WORK\_STATE, CERTIFICATION\_BEGIN\_DATE, CERTIFICATION\_END\_DATE, EMPLOYER\_NAME, EMPLOYER\_ADDRESS1, EMPLOYER\_ADDRESS2, EMPLOYER\_CITY, EMPLOYER\_STATE, EMPLOYER\_POSTAL\_CODE, AGENT\_ATTORNEY\_NAME, AGENT\_ATTORNEY\_CITY, AGENT\_ATTORNEY\_STATE, SOC\_CODE, SOC\_NAME, JOB\_TITLE, NBR\_WORKERS\_CERTIFIED, PREVIALING\_WAGE (spelling error present in data), PW\_UNIT\_OF\_PAY, BASIC\_RATE\_OF\_PAY, BASIC\_UNIT\_OF\_PAY
+>>>>>>> 029e306a34e6584c61ccdce7e47281049b9b8f88
 
 Section 2. Data analysis plan
 -----------------------------
@@ -51,6 +47,7 @@ The comparison groups will include different states, which could be combined int
 
 We will primarily use hypothesis testing to determine variable independence. In other words, we will use hypothesis tests to determine if there is a statistically significant difference in the proportion of Visa applicants that get accepted. We will also make a linear model to predict whether or not certain cases would or wouldn't be granted a Visa. In doing this, we will used Cross Validation to confirm that our model would be a good predictor in situations outside of our data.
 
+<<<<<<< HEAD
 When exploring the relationships between variables, p-values lower than .05 would indicate that whatever factor we were testing did have an impact on whether or not the Visa got accepted. For our linear model, if we were to use backwards selection, an decrease in the adjusted r-squared would indicate that the inclusion of said variable improves our model.
 
 ``` r
@@ -128,13 +125,27 @@ h2b <- read_csv("data/H-2B_FY2008.csv") %>%
 h2b <- h2b %>%
   select(CASE_NO, DECISION_DATE, NPC_SUBMITTED_DATE, CASE_STATUS, ALIEN_WORK_STATE, CERTIFICATION_BEGIN_DATE, CERTIFICATION_END_DATE, EMPLOYER_CITY, EMPLOYER_STATE, EMPLOYER_POSTAL_CODE, AGENT_ATTORNEY_CITY, AGENT_ATTORNEY_STATE, JOB_TITLE, NBR_WORKERS_CERTIFIED, BASIC_RATE_OF_PAY, BASIC_UNIT_OF_PAY, DOT_OCCUPATIONAL_CODE, NBR_WORKERS_REQUESTED, DOT_NAME, SOC_CODE, SOC_NAME)
 ```
+=======
+![](proposal_files/figure-markdown_github/workers-1.png)
+
+![](proposal_files/figure-markdown_github/salary-1.png)
+
+    ## # A tibble: 5 x 8
+    ##   CASE_STATUS         min    q1 median    q3    max  mean    sd
+    ##   <chr>             <dbl> <dbl>  <dbl> <dbl>  <dbl> <dbl> <dbl>
+    ## 1 CERTIFIED          5.85  7.90   8.66  9.86 575    11.4   26.3
+    ## 2 DENIED             0     8.00   9.28 12.5  900    12.4   26.3
+    ## 3 FINAL REVIEW      40.0  40.0   40.0  40.0   40.0  40.0   NA  
+    ## 4 PARTIAL CERTIFIED  5.52  8.00   8.63  9.54 381     9.39  11.0
+    ## 5 WITHDRAWN          7.00  7.00   7.00  7.00   7.00  7.00  NA
+
+Our preliminary visualizations and summary statistics show that both salary and the number of workers certified in each request are both unimodal and strongly right skewed. For salary especially, there are many outliers, which appear to be mistakes, because it's unreasonable to expect anyone to be making thousands of dollars per hour. Note that these visualizations and statistics include only those who's wage is listed per hour, which is the large majority of applications. In our full analysis, we will convert the other units, like weekly or monthly to hours.
+
+The initial summry statistics don't show a clear difference in the spreads of salaries between visa applications that are certified, denied, and partially certified. The quartiles and medians for each are fairly similar. Means and standard deviations don't appear to be useful for analyzing salaries because of skew.
+>>>>>>> 029e306a34e6584c61ccdce7e47281049b9b8f88
 
 Section 3. Data
 ---------------
-
-``` r
-glimpse(h2b)
-```
 
     ## Observations: 31,422
     ## Variables: 21
