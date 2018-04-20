@@ -1,13 +1,59 @@
 ---
 title: "PROJECT TITLE"
-author: "NAME HERE"
-date: "TODAY'S DATE"
+author: "24-7"
+date: "4-20-18"
 output: github_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
+
+```{r - install_packages}
+
+library(tidyverse)
+library(readxl)
+
+```
+
+
+```{r join-data, echo = FALSE, message=FALSE}
+h2b <- read_csv("data/H-2B_FY2008.csv") %>%
+  full_join(read_csv("data/H-2B_FY2009.csv")) %>%
+  full_join(read_csv("data/H-2B_FY2010.csv")) %>%
+  full_join(read_csv("data/H-2B_FY2011.csv")) %>%
+  full_join(read_csv("data/H-2B_FY2012.csv")) 
+
+h2b <- h2b %>%
+  select(CASE_NO, DECISION_DATE, NPC_SUBMITTED_DATE, CASE_STATUS, ALIEN_WORK_STATE, CERTIFICATION_BEGIN_DATE, CERTIFICATION_END_DATE, EMPLOYER_CITY, EMPLOYER_STATE, EMPLOYER_POSTAL_CODE, AGENT_ATTORNEY_CITY, AGENT_ATTORNEY_STATE, JOB_TITLE, NBR_WORKERS_CERTIFIED, PREVAILING_WAGE, PW_UNIT_OF_PAY, BASIC_RATE_OF_PAY, BASIC_UNIT_OF_PAY, DOT_OCCUPATIONAL_CODE, NBR_WORKERS_REQUESTED, DOT_NAME, SOC_CODE, SOC_NAME)
+
+```
+
+### Background
+
+### Data Manipulation
+```{r - muate_benefits}
+
+h2b_pay_diff <- h2b %>%
+  mutate(wage_diff = case_when(
+  PREVAILING_WAGE > BASIC_RATE_OF_PAY ~ "prevail_higher",
+  PREVAILING_WAGE == BASIC_RATE_OF_PAY ~ "same",
+  PREVAILING_WAGE < BASIC_RATE_OF_PAY ~ "basic_higher"
+  ))
+  
+```
+
+
+```{r - mutate_season}
+
+```
+
+
+### Visualizations
+
+### Hypothesis Tests
+
+### Regression Model
 
 Your project goes here! Before you submit, make sure your chunks are turned off with `echo = FALSE`. 
 
