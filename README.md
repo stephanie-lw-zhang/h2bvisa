@@ -47,4 +47,8 @@ SOC_CODE : Job category code
 
 SOC_NAME : Job category
 
+PREVAILING_WAGE: Wage received after benefits
+
+PW_UNIT_OF_PAY:The time unit for which the prevailing wage is allocated
+
 
