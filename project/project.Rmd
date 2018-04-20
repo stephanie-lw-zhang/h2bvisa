@@ -32,19 +32,57 @@ h2b <- h2b %>%
 ### Background
 
 ### Data Manipulation
+```{r - uncapitalize_variables}
+(h2b <- h2b %>%
+  mutate(case_no = CASE_NO, 
+         decision_date = DECISION_DATE,
+         npc_submitted_date = NPC_SUBMITTED_DATE,
+         case_status = CASE_STATUS, 
+         alien_work_state = ALIEN_WORK_STATE, 
+         certification_begin_date = CERTIFICATION_BEGIN_DATE, 
+         certification_end_date = CERTIFICATION_END_DATE, 
+         employer_city = EMPLOYER_CITY, 
+         employer_state = EMPLOYER_STATE, 
+         employer_postal_code = EMPLOYER_POSTAL_CODE, 
+         agent_attorney_city = AGENT_ATTORNEY_CITY, 
+         agent_attorney_state = AGENT_ATTORNEY_STATE, 
+         job_title = JOB_TITLE, 
+         nbr_workers_certified = NBR_WORKERS_CERTIFIED, 
+         prevailing_wage = PREVAILING_WAGE, 
+         pw_unit_of_pay = PW_UNIT_OF_PAY, 
+         basic_rate_of_pay = BASIC_RATE_OF_PAY, 
+         basic_unit_of_pay = BASIC_UNIT_OF_PAY, 
+         dot_occupational_code = DOT_OCCUPATIONAL_CODE, 
+         nbur_workers_requested =NBR_WORKERS_REQUESTED, 
+         dot_name = DOT_NAME, 
+         soc_code = SOC_CODE, 
+         soc_name = SOC_NAME))
+
+h2b <- h2b %>%
+  select(case_no, decision_date, npc_submitted_date, case_status, alien_work_state, certification_begin_date, certification_end_date, employer_city, employer_state, employer_postal_code, agent_attorney_city, agent_attorney_state, job_title, nbr_workers_certified, prevailing_wage, pw_unit_of_pay, basic_rate_of_pay, basic_unit_of_pay, dot_occupational_code, nbur_workers_requested, dot_name, soc_code, soc_name)
+
+```
+
+
 ```{r - muate_benefits}
 
-h2b_pay_diff <- h2b %>%
+h2b <- h2b %>%
   mutate(wage_diff = case_when(
-  PREVAILING_WAGE > BASIC_RATE_OF_PAY ~ "prevail_higher",
-  PREVAILING_WAGE == BASIC_RATE_OF_PAY ~ "same",
-  PREVAILING_WAGE < BASIC_RATE_OF_PAY ~ "basic_higher"
+  prevailing_wage > basic_rate_of_pay ~ "prevail_higher",
+  prevailing_wage == basic_rate_of_pay ~ "same",
+  prevailing_wage < basic_rate_of_pay ~ "basic_higher"
   ))
   
 ```
 
 
 ```{r - mutate_season}
+
+#h2b <- h2b %>%
+  #mutate(decision_season = case_when(
+    
+    
+  #))
 
 ```
 
