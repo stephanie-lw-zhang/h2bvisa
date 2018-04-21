@@ -91,7 +91,7 @@ h2b_filter_1 <- h2b_1 %>%
 h2b_filter_2 <- h2b_2 %>%
   filter(submitted_day == "NA") %>%
     separate(npc_submitted_date, c('submitted_day', 'submitted_month', 'submitted_year'), sep = "-", remove = FALSE)
-  
+
 h2b <- h2b_1 %>%
   full_join(h2b_2) %>%
   full_join(h2b_filter_1) %>%
