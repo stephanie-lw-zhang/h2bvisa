@@ -165,19 +165,18 @@ h2b <- h2b %>%
 ```
 
 ```{r-mutate_job_categories}
-
-# h2b <- h2b %>%
-#   mutate(occupation_category = case_when(
-#     str_sub(dot_occupational_code,1,1) == "0" | str_sub(dot_occupational_code,1,1) == "1" ~ "professional, technical, and managerial",
-#     str_sub(dot_occupational_code,1,1) == "2" ~ "clerical and sales",
-#     str_sub(dot_occupational_code,1,1) == "3" ~ "service",
-#     str_sub(dot_occupational_code,1,1) == "4" ~ "agricultural, fishery, forestry, and related",
-#     str_sub(dot_occupational_code,1,1) == "5" ~ "processing",
-#     str_sub(dot_occupational_code,1,1) == "6" ~ "machine trades",
-#     str_sub(dot_occupational_code,1,1) == "7" ~ "benchwork",
-#     str_sub(dot_occupational_code,1,1) == "8" ~ "structural work",
-#     str_sub(dot_occupational_code,1,1) == "9" ~ "miscellaneous"
-#   ))
+h2b <- h2b %>%
+  mutate(occupation_category = case_when(
+    str_sub(dot_occupational_code,1,1) == "0" | str_sub(dot_occupational_code,1,1) == "1" ~ "professional, technical, and managerial",
+    str_sub(dot_occupational_code,1,1) == "2" ~ "clerical and sales",
+    str_sub(dot_occupational_code,1,1) == "3" ~ "service",
+    str_sub(dot_occupational_code,1,1) == "4" ~ "agricultural, fishery, forestry, and related",
+    str_sub(dot_occupational_code,1,1) == "5" ~ "processing",
+    str_sub(dot_occupational_code,1,1) == "6" ~ "machine trades",
+    str_sub(dot_occupational_code,1,1) == "7" ~ "benchwork",
+    str_sub(dot_occupational_code,1,1) == "8" ~ "structural work",
+    str_sub(dot_occupational_code,1,1) == "9" ~ "miscellaneous"
+  ))
 
 ```
 
