@@ -28,6 +28,11 @@ PROJECT TITLE
     ## 11177, 11178, 11179, 11180, 11181, 18268, 18269, 18270, 18271, 18272,
     ## 18273, 18274, 18275, 18276, 18277, 18278, ...
 
+    ## Joining, by = c("case_no", "decision_date", "npc_submitted_date", "case_status", "alien_work_state", "certification_begin_date", "certification_end_date", "employer_city", "employer_state", "employer_postal_code", "agent_attorney_city", "agent_attorney_state", "job_title", "nbr_workers_certified", "prevailing_wage", "pw_unit_of_pay", "basic_rate_of_pay", "basic_unit_of_pay", "dot_occupational_code", "nbur_workers_requested", "dot_name", "soc_code", "soc_name", "wage_diff")
+    ## Joining, by = c("case_no", "decision_date", "npc_submitted_date", "case_status", "alien_work_state", "certification_begin_date", "certification_end_date", "employer_city", "employer_state", "employer_postal_code", "agent_attorney_city", "agent_attorney_state", "job_title", "nbr_workers_certified", "prevailing_wage", "pw_unit_of_pay", "basic_rate_of_pay", "basic_unit_of_pay", "dot_occupational_code", "nbur_workers_requested", "dot_name", "soc_code", "soc_name", "wage_diff")
+
+    ## Joining, by = c("case_no", "decision_date", "decision_month", "decision_day", "decision_year", "npc_submitted_date", "case_status", "alien_work_state", "certification_begin_date", "certification_end_date", "employer_city", "employer_state", "employer_postal_code", "agent_attorney_city", "agent_attorney_state", "job_title", "nbr_workers_certified", "prevailing_wage", "pw_unit_of_pay", "basic_rate_of_pay", "basic_unit_of_pay", "dot_occupational_code", "nbur_workers_requested", "dot_name", "soc_code", "soc_name", "wage_diff", "submitted_month", "submitted_day", "submitted_year")
+
 ### Visualizations
 
 ### Hypothesis Tests

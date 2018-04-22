@@ -10,10 +10,9 @@ knitr::opts_chunk$set(echo = FALSE)
 ```
 
 ```{r - install_packages}
-
 library(tidyverse)
 library(readxl)
-
+library(stringr)
 ```
 
 
@@ -79,7 +78,7 @@ h2b <- h2b %>%
 ```{r - mutate_season}
 
 h2b_1 <- h2b %>%
-  separate(decision_date, c('decision_month', 'decision_day', 'decision_year'), sep="/", remove = FALSE)
+  separate(decision_date, c('decision_month', 'decision_day', 'decision_year'), sep="/", remove = FALSE) 
 
 h2b_2 <- h2b %>%
   separate(npc_submitted_date, c('submitted_month', 'submitted_day', 'submitted_year'), sep="/", remove = FALSE)
@@ -88,14 +87,24 @@ h2b_filter_1 <- h2b_1 %>%
   filter(decision_day == "NA") %>%
   separate(decision_date, c('decision_day', 'decision_month', 'decision_year'), sep="-", remove = FALSE) 
 
+h2b_1 <- h2b_1 %>%
+  filter(decision_day != "NA")
+
 h2b_filter_2 <- h2b_2 %>%
   filter(submitted_day == "NA") %>%
     separate(npc_submitted_date, c('submitted_day', 'submitted_month', 'submitted_year'), sep = "-", remove = FALSE)
 
+h2b_2 <- h2b_2  %>%
+  filter(submitted_day != "NA")
+
 h2b <- h2b_1 %>%
-  full_join(h2b_2) %>%
-  full_join(h2b_filter_1) %>%
+  full_join(h2b_2) 
+  
+h2b_filter <- h2b_filter_1 %>%
   full_join(h2b_filter_2)
+
+h2b <- h2b %>%
+  full_join(h2b_filter)
 
 h2b <- h2b %>%
   mutate(decision_season = case_when(
@@ -155,6 +164,31 @@ h2b <- h2b %>%
 
 ```
 
+```{r-mutate_region}
+h2b <- h2b %>%
+  mutate(region = case_when(
+    employer_state == "WA" | employer_state == "OR" | employer_state == "CA" |  employer_state == "ID" | employer_state == "MT" | employer_state == "WY" | employer_state == "NV" | employer_state == "UT" | employer_state == "CO" | employer_state == "AZ" | employer_state == "NM" | employer_state == "AK" | employer_state == "HI" ~ "West",
+    employer_state == "ND" | employer_state == "SD" | employer_state == "NE" | employer_state == "KS" | employer_state == "MN" | employer_state == "IA" | employer_state == "MO" | employer_state == "WI" | employer_state == "IL" | employer_state == "MI" | employer_state == "IN" | employer_state == "OH" ~ "Midwest",
+    employer_state == "TX" | employer_state == "OK" | employer_state == "AR" | employer_state == "LA" | employer_state == "MS" | employer_state == "AL" | employer_state == "TN" | employer_state == "KY" | employer_state == "WV" | employer_state == "MD" | employer_state == "DE" | employer_state == "VA" | employer_state == "NC" | employer_state == "SC" | employer_state == "GA" | employer_state == "FL" ~ "South",
+    employer_state == "ME" | employer_state == "NH" | employer_state == "VT" | employer_state == "MA" | employer_state == "CT" | employer_state == "RI" | employer_state == "NJ" | employer_state == "NY" | employer_state == "PA" ~ "Northeast"
+  ))
+```
+
+```{r-mutate_job_categories}
+h2b <- h2b %>%
+  mutate(occupation_category = case_when(
+    str_sub(dot_occupational_code,1,1) == "0" | str_sub(dot_occupational_code,1,1) == "1" ~ "professional, technical, and managerial",
+    str_sub(dot_occupational_code,1,1) == "2" ~ "clerical and sales",
+    str_sub(dot_occupational_code,1,1) == "3" ~ "service",
+    str_sub(dot_occupational_code,1,1) == "4" ~ "agricultural, fishery, forestry, and related",
+    str_sub(dot_occupational_code,1,1) == "5" ~ "processing",
+    str_sub(dot_occupational_code,1,1) == "6" ~ "machine trades",
+    str_sub(dot_occupational_code,1,1) == "7" ~ "benchwork",
+    str_sub(dot_occupational_code,1,1) == "8" ~ "structural work",
+    str_sub(dot_occupational_code,1,1) == "9" ~ "miscellaneous"
+  ))
+
+```
 
 ### Visualizations
 ```{r map}
