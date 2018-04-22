@@ -157,6 +157,13 @@ h2b <- h2b %>%
 
 
 ### Visualizations
+```{r map}
+h2b %>%
+  mutate(state = employer_state) %>%
+  group_by(state) %>%
+  summarise(prop = sum(nbur_workers_requested) / sum(nbur_workers_certified))
+```
+
 
 ### Hypothesis Tests
 
