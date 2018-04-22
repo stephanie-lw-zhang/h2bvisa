@@ -192,10 +192,24 @@ h2b <- h2b %>%
 
 ### Visualizations
 ```{r map}
-h2b %>%
-  mutate(state = employer_state) %>%
-  group_by(state) %>%
-  summarise(prop = sum(nbur_workers_requested) / sum(nbur_workers_certified))
+state_props <- h2b %>%
+  filter(!is.na(nbur_workers_requested) & !(is.na(nbr_workers_certified))) %>%
+  filter(employer_state %in% state.abb | employer_state == "DC") %>%
+  filter(employer_state != "HI" & employer_state!="AK") %>%
+  mutate(region = case_when(employer_state %in% state.abb ~ tolower(setNames(state.name, state.abb))[employer_state], employer_state == "DC" ~ "district of columbia")) %>%
+  group_by(region) %>%
+  summarise(prop = sum(nbr_workers_certified) / sum(nbur_workers_requested))
+
+map <- merge(state_props, map_data("state"), sort = FALSE, by = "region")
+
+map %>%
+  ggplot() + 
+  geom_polygon(aes(x = long, y = lat, group = group, fill = prop), color = "white") +
+  coord_fixed(1.5)
+  
+map_data("state") %>%
+  ggplot() +
+  geom_polygon(aes(x = long, y = lat, group = group), color = "white")
 ```
 
 
