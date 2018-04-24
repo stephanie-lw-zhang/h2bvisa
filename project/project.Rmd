@@ -72,6 +72,7 @@ h2b <- h2b %>%
   prevailing_wage < basic_rate_of_pay ~ "basic_higher"
   ))
   
+
 ```
 
 
@@ -161,6 +162,9 @@ h2b <- h2b %>%
     submitted_month == "Nov" ~ "fall",
     submitted_month == "Dec" ~ "winter"
   ))
+
+(h2b %>%
+    filter(decision_year == "10"))
 
 ```
 

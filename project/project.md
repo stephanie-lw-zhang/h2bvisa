@@ -31,7 +31,20 @@ PROJECT TITLE
     ## Joining, by = c("case_no", "decision_date", "npc_submitted_date", "case_status", "alien_work_state", "certification_begin_date", "certification_end_date", "employer_city", "employer_state", "employer_postal_code", "agent_attorney_city", "agent_attorney_state", "job_title", "nbr_workers_certified", "prevailing_wage", "pw_unit_of_pay", "basic_rate_of_pay", "basic_unit_of_pay", "dot_occupational_code", "nbur_workers_requested", "dot_name", "soc_code", "soc_name", "wage_diff")
     ## Joining, by = c("case_no", "decision_date", "npc_submitted_date", "case_status", "alien_work_state", "certification_begin_date", "certification_end_date", "employer_city", "employer_state", "employer_postal_code", "agent_attorney_city", "agent_attorney_state", "job_title", "nbr_workers_certified", "prevailing_wage", "pw_unit_of_pay", "basic_rate_of_pay", "basic_unit_of_pay", "dot_occupational_code", "nbur_workers_requested", "dot_name", "soc_code", "soc_name", "wage_diff")
 
-    ## Joining, by = c("case_no", "decision_date", "decision_month", "decision_day", "decision_year", "npc_submitted_date", "case_status", "alien_work_state", "certification_begin_date", "certification_end_date", "employer_city", "employer_state", "employer_postal_code", "agent_attorney_city", "agent_attorney_state", "job_title", "nbr_workers_certified", "prevailing_wage", "pw_unit_of_pay", "basic_rate_of_pay", "basic_unit_of_pay", "dot_occupational_code", "nbur_workers_requested", "dot_name", "soc_code", "soc_name", "wage_diff", "submitted_month", "submitted_day", "submitted_year")
+    ## # A tibble: 0 x 32
+    ## # ... with 32 variables: case_no <chr>, decision_date <chr>,
+    ## #   decision_month <chr>, decision_day <chr>, decision_year <chr>,
+    ## #   npc_submitted_date <chr>, case_status <chr>, alien_work_state <chr>,
+    ## #   certification_begin_date <chr>, certification_end_date <chr>,
+    ## #   employer_city <chr>, employer_state <chr>, employer_postal_code <chr>,
+    ## #   agent_attorney_city <chr>, agent_attorney_state <chr>,
+    ## #   job_title <chr>, nbr_workers_certified <int>, prevailing_wage <dbl>,
+    ## #   pw_unit_of_pay <chr>, basic_rate_of_pay <dbl>,
+    ## #   basic_unit_of_pay <chr>, dot_occupational_code <chr>,
+    ## #   nbur_workers_requested <int>, dot_name <chr>, soc_code <int>,
+    ## #   soc_name <chr>, wage_diff <chr>, submitted_month <chr>,
+    ## #   submitted_day <chr>, submitted_year <chr>, decision_season <chr>,
+    ## #   submitted_season <chr>
 
 ### Visualizations
 
