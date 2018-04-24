@@ -17,15 +17,25 @@ library(stringr)
 
 
 ```{r join-data, echo = FALSE, message=FALSE}
-h2b <- read_csv("data/H-2B_FY2008.csv") %>%
-  full_join(read_csv("data/H-2B_FY2009.csv")) %>%
-  full_join(read_csv("data/H-2B_FY2010.csv")) %>%
-  full_join(read_csv("data/H-2B_FY2011.csv")) %>%
-  full_join(read_csv("data/H-2B_FY2012.csv")) 
+h2b2008 <- read_csv("data/H-2B_FY2008.csv") %>%
+  mutate(year = 2008)
+h2b2009 <- read_csv("data/H-2B_FY2009.csv") %>%
+  mutate(year = 2009)
+h2b2010 <- read_csv("data/H-2B_FY2010.csv") %>%
+  mutate(year = 2010)
+h2b2011 <- read_csv("data/H-2B_FY2011.csv") %>%
+  mutate(year = 2011)
+h2b2012 <- read_csv("data/H-2B_FY2012.csv") %>%
+  mutate(year = 2012)
+
+h2b <- h2b2008 %>%
+  full_join(h2b2009) %>%
+  full_join(h2b2010)%>%
+  full_join(h2b2011)%>%
+  full_join(h2b2012)
 
 h2b <- h2b %>%
-  select(CASE_NO, DECISION_DATE, NPC_SUBMITTED_DATE, CASE_STATUS, ALIEN_WORK_STATE, CERTIFICATION_BEGIN_DATE, CERTIFICATION_END_DATE, EMPLOYER_CITY, EMPLOYER_STATE, EMPLOYER_POSTAL_CODE, AGENT_ATTORNEY_CITY, AGENT_ATTORNEY_STATE, JOB_TITLE, NBR_WORKERS_CERTIFIED, PREVAILING_WAGE, PW_UNIT_OF_PAY, BASIC_RATE_OF_PAY, BASIC_UNIT_OF_PAY, DOT_OCCUPATIONAL_CODE, NBR_WORKERS_REQUESTED, DOT_NAME, SOC_CODE, SOC_NAME)
-
+  select(year, CASE_NO, DECISION_DATE, NPC_SUBMITTED_DATE, CASE_STATUS, ALIEN_WORK_STATE, CERTIFICATION_BEGIN_DATE, CERTIFICATION_END_DATE, EMPLOYER_CITY, EMPLOYER_STATE, EMPLOYER_POSTAL_CODE, AGENT_ATTORNEY_CITY, AGENT_ATTORNEY_STATE, JOB_TITLE, NBR_WORKERS_CERTIFIED, PREVAILING_WAGE, PW_UNIT_OF_PAY, BASIC_RATE_OF_PAY, BASIC_UNIT_OF_PAY, DOT_OCCUPATIONAL_CODE, NBR_WORKERS_REQUESTED, DOT_NAME, SOC_CODE, SOC_NAME)
 ```
 
 ### Background
@@ -58,7 +68,7 @@ h2b <- h2b %>%
          soc_name = SOC_NAME)
 
 h2b <- h2b %>%
-  select(case_no, decision_date, npc_submitted_date, case_status, alien_work_state, certification_begin_date, certification_end_date, employer_city, employer_state, employer_postal_code, agent_attorney_city, agent_attorney_state, job_title, nbr_workers_certified, prevailing_wage, pw_unit_of_pay, basic_rate_of_pay, basic_unit_of_pay, dot_occupational_code, nbur_workers_requested, dot_name, soc_code, soc_name)
+  select(year, case_no, decision_date, npc_submitted_date, case_status, alien_work_state, certification_begin_date, certification_end_date, employer_city, employer_state, employer_postal_code, agent_attorney_city, agent_attorney_state, job_title, nbr_workers_certified, prevailing_wage, pw_unit_of_pay, basic_rate_of_pay, basic_unit_of_pay, dot_occupational_code, nbur_workers_requested, dot_name, soc_code, soc_name)
 
 ```
 
@@ -162,6 +172,7 @@ h2b <- h2b %>%
     submitted_month == "Dec" ~ "winter"
   ))
 
+
 ```
 
 ```{r-mutate_region}
@@ -200,23 +211,55 @@ state_props <- h2b %>%
   group_by(region) %>%
   summarise(prop = sum(nbr_workers_certified) / sum(nbur_workers_requested))
 
+#h2b %>%
+  #filter(!is.na(nbur_workers_requested) & !(is.na(nbr_workers_certified))) %>%
+  #group_by(employer_state) %>%
+  #summarise(prop = sum(nbr_workers_certified) / sum(nbur_workers_requested),
+   #         n = n()) %>%
+  #arrange(desc(prop))
+
+#h2b %>%
+ # filter(!is.na(nbur_workers_requested) & !(is.na(nbr_workers_certified))) %>%
+  #group_by(employer_state) %>%
+  #summarise(prop = sum(nbr_workers_certified) / sum(nbur_workers_requested),
+   #         n = n()) %>%
+  #arrange(prop)
+
 map <- merge(state_props, map_data("state"), sort = FALSE, by = "region")
 
 map %>%
   ggplot() + 
   geom_polygon(aes(x = long, y = lat, group = group, fill = prop), color = "white") +
-  coord_fixed(1.5)
+  coord_fixed(1.5) + 
+  labs(title = "Proportion of H2B visa applications approved",
+       subtitle = "By state",
+       x = "Longitude",
+       y = "Latitude",
+       fill = "Proportion approved")
   
-map_data("state") %>%
-  ggplot() +
-  geom_polygon(aes(x = long, y = lat, group = group), color = "white")
+#map_data("state") %>%
+ # ggplot() +
+  #geom_polygon(aes(x = long, y = lat, group = group), color = "white")
 ```
 
+```{r line-graph}
+h2b %>% 
+  filter(case_status %in% c("CERTIFIED", "PARTIAL CERTIFIED", "DENIED")) %>%
+  group_by(year) %>%
+  count(case_status) %>%
+  ggplot(mapping = aes(x = year, y = n, color = case_status)) +
+  geom_point() + 
+  geom_line() +
+  labs(title = "Decrease in number of H2B visas certified",
+       subtitle = "From 2008 to 2012",
+       x = "Year",
+       y = "Number",
+       color = "Application Result")
+```
+
+In 2008, Congress failed to renew the Save Our Small and Seasonal Bussinesses Act (SOSSBA). This reduced the cap for the total number of H2B Visas that could be approved every year. 
 
 ### Hypothesis Tests
 
 ### Regression Model
 
-Your project goes here! Before you submit, make sure your chunks are turned off with `echo = FALSE`. 
-
-You can add sections as you see fit. Make sure you have a section called Introduction at the beginning and a section called Conclusion at the end. The rest is up to you!
