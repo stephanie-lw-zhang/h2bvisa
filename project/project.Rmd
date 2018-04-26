@@ -152,6 +152,8 @@ h2b <- h2b %>%
     submitted_month == "Dec" ~ "winter"
   ))
 
+h2b %>%
+  count(submitted_season)
 ```
 
 ```{r-mutate_region}
