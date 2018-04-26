@@ -15,7 +15,12 @@ library(readxl)
 library(stringr)
 library(lubridate)
 library(maps)
+library(Metrics)
 
+```
+
+```{r-seed}
+set.seed(1234)
 ```
 
 
@@ -88,6 +93,11 @@ h2b <- h2b %>%
 
 ```
 
+<<<<<<< HEAD
+
+```{r - mutate_season}
+=======
+>>>>>>> 418c54b5189e35b24eac6cea7a936d402d290beb
 
 ```{r - mutate_season}
 h2b <- h2b %>%
@@ -262,5 +272,13 @@ In 2008, Congress failed to renew the Save Our Small and Seasonal Bussinesses Ac
 ```{r-mutate-prop-certified}
 h2b <- h2b %>%
   mutate(prop_workers_certified = nbr_workers_certified/nbur_workers_requested) 
+```
+
+```{r-backwards-selection}
+mod <- lm(prop_workers_certified ~ occupation_category + prevailing_wage + submitted_season + region + nbur_workers_requested, data = h2b)
+
+selected_mod <- step(mod, direction = "backward")
+
+(selected_mod)
 ```
 
