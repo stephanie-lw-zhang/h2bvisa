@@ -3,14 +3,24 @@ PROJECT TITLE
 24-7
 4-20-18
 
+<<<<<<< HEAD
     ## ── Attaching packages ──────────────────────────────────────────────────── tidyverse 1.2.1 ──
+=======
+    ## Warning: running command 'timedatectl' had status 1
+
+    ## ── Attaching packages ──────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+>>>>>>> 418c54b5189e35b24eac6cea7a936d402d290beb
 
     ## ✔ ggplot2 2.2.1     ✔ purrr   0.2.4
     ## ✔ tibble  1.4.2     ✔ dplyr   0.7.4
     ## ✔ tidyr   0.8.0     ✔ stringr 1.3.0
     ## ✔ readr   1.1.1     ✔ forcats 0.3.0
 
+<<<<<<< HEAD
     ## ── Conflicts ─────────────────────────────────────────────────────── tidyverse_conflicts() ──
+=======
+    ## ── Conflicts ─────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+>>>>>>> 418c54b5189e35b24eac6cea7a936d402d290beb
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
 

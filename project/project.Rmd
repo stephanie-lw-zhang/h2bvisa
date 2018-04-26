@@ -93,9 +93,13 @@ h2b <- h2b %>%
 
 ```
 
+<<<<<<< HEAD
 
 ```{r - mutate_season}
+=======
+>>>>>>> 418c54b5189e35b24eac6cea7a936d402d290beb
 
+```{r - mutate_season}
 h2b <- h2b %>%
   mutate(decision_season = case_when(
     str_sub(decision_date,1,2) == "1/" ~ "winter",
@@ -175,9 +179,6 @@ h2b <- h2b %>%
     str_sub(npc_submitted_date,3,5) == "Dec" ~ "winter",
     str_sub(npc_submitted_date,4,6) == "Dec" ~ "winter",
   ))
-
-  
-  
 ```
 
 
