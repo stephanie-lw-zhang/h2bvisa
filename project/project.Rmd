@@ -273,19 +273,11 @@ h2b <- h2b %>%
   mutate(prop_workers_certified = nbr_workers_certified/nbur_workers_requested) 
 ```
 
-```{r}
-h2b_cv <- h2b %>%
-  mutate(id = 1:n()) %>%
-  sample_n(nrow(h2b)) %>%
-  mutate(fold = (((1:n()) - 1) %% 5) + 1 )
+```{r-backwards-selection}
+mod <- lm(prop_workers_certified ~ occupation_category + prevailing_wage + submitted_season + region + nbur_workers_requested, data = h2b)
 
-h2b_cv %>% 
-  count(fold)
+selected_mod <- step(mod, direction = "backward")
 
-test_fold <- 1
-test <- h2b_cv %>% filter(fold == test_fold)
-train <- h2b_cv %>% anti_join(test, by = "id")
-mod <- lm(prop_workers_certified ~ occupation_category + prevailing_wage + submitted_season + region + nbur_workers_requested, data = train)
-# (rmse_test1 <- rmse(mod, test))
+(selected_mod)
 ```
 
