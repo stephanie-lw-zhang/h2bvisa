@@ -266,6 +266,14 @@ In 2008, Congress failed to renew the Save Our Small and Seasonal Bussinesses Ac
 
 ### Regression Model
 ```{r}
+h2b <- h2b %>%
+  mutate(percent_approved = nbr_workers_certified/nbur_workers_requested) 
 
+h2b %>%
+  filter(!is.na(nbr_workers_certified)) %>%
+  filter(!is.na(nbur_workers_requested)) %>%
+  select(nbr_workers_certified, nbur_workers_requested, percent_approved)
+
+  
 ```
 

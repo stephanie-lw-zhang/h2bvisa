@@ -64,3 +64,18 @@ In 2008, Congress failed to renew the Save Our Small and Seasonal Bussinesses Ac
 ### Hypothesis Tests
 
 ### Regression Model
+
+    ## # A tibble: 17,361 x 3
+    ##    nbr_workers_certified nbur_workers_requested percent_approved
+    ##                    <int>                  <int>            <dbl>
+    ##  1                     0                     20            0.   
+    ##  2                    15                     15            1.00 
+    ##  3                     5                      5            1.00 
+    ##  4                     4                      4            1.00 
+    ##  5                    24                     24            1.00 
+    ##  6                    19                     20            0.950
+    ##  7                     3                      3            1.00 
+    ##  8                    13                     13            1.00 
+    ##  9                    10                     11            0.909
+    ## 10                    15                     15            1.00 
+    ## # ... with 17,351 more rows
