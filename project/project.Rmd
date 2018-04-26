@@ -75,6 +75,13 @@ h2b <- h2b %>%
 
 ```
 
+```{r}
+(h2b_test <- h2b %>%
+  mutate(case_when(
+    "Apr" %in% decision_date ~ "spring"
+  )))
+```
+
 
 ```{r - muate_benefits}
 
@@ -90,26 +97,31 @@ h2b <- h2b %>%
 
 
 ```{r - mutate_season}
-
 h2b_1 <- h2b %>%
-  separate(decision_date, c('decision_month', 'decision_day', 'decision_year'), sep="/", remove = FALSE) 
+  filter( "/" %in% decision_date) %>%
+```
+
+
+```{r - mutate_season}
+separate(decision_date, c('decision_month', 'decision_day', 'decision_year'), sep="/", remove = FALSE) 
 
 h2b_2 <- h2b %>%
+  filter( "/" %in% npc_submitted_date) %>%
   separate(npc_submitted_date, c('submitted_month', 'submitted_day', 'submitted_year'), sep="/", remove = FALSE)
 
-h2b_filter_1 <- h2b_1 %>%
-  #filter(decision_day == "NA") %>%
+h2b_filter_1 <- h2b %>%
+  filter( "-" %in% decision_date) %>%
   separate(decision_date, c('decision_day', 'decision_month', 'decision_year'), sep="-", remove = FALSE) 
 
-h2b_1 <- h2b_1 %>%
-  filter(decision_day != "NA")
+#h2b_1 <- h2b %>%
+  #filter(decision_day != "NA")
 
 h2b_filter_2 <- h2b_2 %>%
-  #filter(submitted_day == "NA") %>%
+  filter( "-" %in% npc_submitted_date) %>%
     separate(npc_submitted_date, c('submitted_day', 'submitted_month', 'submitted_year'), sep = "-", remove = FALSE)
 
-h2b_2 <- h2b_2  %>%
-  filter(submitted_day != "NA")
+#h2b_2 <- h2b_2  %>%
+  #filter(submitted_day != "NA")
 
 h2b <- h2b_1 %>%
   full_join(h2b_2) 
