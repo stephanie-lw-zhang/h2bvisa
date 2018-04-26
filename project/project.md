@@ -34,28 +34,6 @@ PROJECT TITLE
 
 ### Data Manipulation
 
-<<<<<<< HEAD
-    ## Joining, by = c("year", "case_no", "decision_date", "npc_submitted_date", "case_status", "alien_work_state", "certification_begin_date", "certification_end_date", "employer_city", "employer_state", "employer_postal_code", "agent_attorney_city", "agent_attorney_state", "job_title", "nbr_workers_certified", "prevailing_wage", "pw_unit_of_pay", "basic_rate_of_pay", "basic_unit_of_pay", "dot_occupational_code", "nbur_workers_requested", "dot_name", "soc_code", "soc_name", "wage_diff")
-    ## Joining, by = c("year", "case_no", "decision_date", "npc_submitted_date", "case_status", "alien_work_state", "certification_begin_date", "certification_end_date", "employer_city", "employer_state", "employer_postal_code", "agent_attorney_city", "agent_attorney_state", "job_title", "nbr_workers_certified", "prevailing_wage", "pw_unit_of_pay", "basic_rate_of_pay", "basic_unit_of_pay", "dot_occupational_code", "nbur_workers_requested", "dot_name", "soc_code", "soc_name", "wage_diff")
-
-    ## Joining, by = c("year", "case_no", "decision_date", "decision_month", "decision_day", "decision_year", "npc_submitted_date", "case_status", "alien_work_state", "certification_begin_date", "certification_end_date", "employer_city", "employer_state", "employer_postal_code", "agent_attorney_city", "agent_attorney_state", "job_title", "nbr_workers_certified", "prevailing_wage", "pw_unit_of_pay", "basic_rate_of_pay", "basic_unit_of_pay", "dot_occupational_code", "nbur_workers_requested", "dot_name", "soc_code", "soc_name", "wage_diff", "submitted_month", "submitted_day", "submitted_year")
-=======
-    ## # A tibble: 3,277 x 2
-    ##    decision_date season
-    ##    <chr>         <chr> 
-    ##  1 2/1/08        winter
-    ##  2 2/1/08        winter
-    ##  3 2/1/08        winter
-    ##  4 2/1/08        winter
-    ##  5 2/1/08        winter
-    ##  6 2/1/08        winter
-    ##  7 2/1/08        winter
-    ##  8 2/1/08        winter
-    ##  9 2/1/08        winter
-    ## 10 2/1/08        winter
-    ## # ... with 3,267 more rows
->>>>>>> 177d05ab1d743d97b68d6184878a180ddc9e735c
-
 ### Visualizations
 
 ![](project_files/figure-markdown_github/-%20map-1.png)
