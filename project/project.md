@@ -3,14 +3,16 @@ PROJECT TITLE
 24-7
 4-20-18
 
-    ## ── Attaching packages ──────────────────────────────────────────────────── tidyverse 1.2.1 ──
+    ## Warning: running command 'timedatectl' had status 1
+
+    ## ── Attaching packages ──────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
 
     ## ✔ ggplot2 2.2.1     ✔ purrr   0.2.4
-    ## ✔ tibble  1.4.2     ✔ dplyr   0.7.4
-    ## ✔ tidyr   0.8.0     ✔ stringr 1.3.0
-    ## ✔ readr   1.1.1     ✔ forcats 0.3.0
+    ## ✔ tibble  1.4.1     ✔ dplyr   0.7.4
+    ## ✔ tidyr   0.7.2     ✔ stringr 1.2.0
+    ## ✔ readr   1.1.1     ✔ forcats 0.2.0
 
-    ## ── Conflicts ─────────────────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ── Conflicts ─────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
 
@@ -32,20 +34,20 @@ PROJECT TITLE
 
 ### Data Manipulation
 
-    ## # A tibble: 3,277 x 2
+    ## # A tibble: 2,729 x 2
     ##    decision_date season
     ##    <chr>         <chr> 
-    ##  1 2/1/08        winter
-    ##  2 2/1/08        winter
-    ##  3 2/1/08        winter
-    ##  4 2/1/08        winter
-    ##  5 2/1/08        winter
-    ##  6 2/1/08        winter
-    ##  7 2/1/08        winter
-    ##  8 2/1/08        winter
-    ##  9 2/1/08        winter
-    ## 10 2/1/08        winter
-    ## # ... with 3,267 more rows
+    ##  1 3/3/08        spring
+    ##  2 3/3/08        spring
+    ##  3 3/3/08        spring
+    ##  4 3/3/08        spring
+    ##  5 3/3/08        spring
+    ##  6 3/3/08        spring
+    ##  7 3/3/08        spring
+    ##  8 3/3/08        spring
+    ##  9 3/3/08        spring
+    ## 10 3/3/08        spring
+    ## # ... with 2,719 more rows
 
 ### Visualizations
 

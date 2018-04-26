@@ -91,7 +91,7 @@ h2b <- h2b %>%
 ```{r}
 h2b_test <- h2b %>%
   mutate(season = case_when(
-    pmatch("Apr", decision_date) ~ "spring",
+    pmatch("Apr", decision_date) != NA_integer_ ~ "spring",
     str_sub(decision_date,1,2) == "1/" ~ "winter",
     str_sub(decision_date,1,2) == "2/" ~ "winter",
     str_sub(decision_date,1,2) == "3/" ~ "spring",
@@ -109,6 +109,8 @@ h2b_test <- h2b %>%
 h2b_test %>%
   filter(season == "spring") %>%
   select(decision_date, season)
+
+h2b <- h2b_test
   
 ```
 
