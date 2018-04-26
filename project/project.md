@@ -32,21 +32,6 @@ PROJECT TITLE
 
 ### Data Manipulation
 
-    ## # A tibble: 2,729 x 2
-    ##    decision_date season
-    ##    <chr>         <chr> 
-    ##  1 3/3/08        spring
-    ##  2 3/3/08        spring
-    ##  3 3/3/08        spring
-    ##  4 3/3/08        spring
-    ##  5 3/3/08        spring
-    ##  6 3/3/08        spring
-    ##  7 3/3/08        spring
-    ##  8 3/3/08        spring
-    ##  9 3/3/08        spring
-    ## 10 3/3/08        spring
-    ## # ... with 2,719 more rows
-
 ### Visualizations
 
 ![](project_files/figure-markdown_github/-%20map-1.png)

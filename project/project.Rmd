@@ -15,6 +15,7 @@ library(readxl)
 library(stringr)
 library(lubridate)
 library(maps)
+library(Metrics)
 
 ```
 
@@ -92,118 +93,93 @@ h2b <- h2b %>%
 
 ```
 
-```{r}
-h2b_test <- h2b %>%
-  mutate(season = case_when(
+
+```{r - mutate_season}
+
+h2b <- h2b %>%
+  mutate(decision_season = case_when(
     str_sub(decision_date,1,2) == "1/" ~ "winter",
     str_sub(decision_date,1,2) == "2/" ~ "winter",
     str_sub(decision_date,1,2) == "3/" ~ "spring",
     str_sub(decision_date,1,2) == "4/" ~ "spring",
     str_sub(decision_date,1,2) == "5/" ~ "spring",
-    str_sub(decision_date,1,1) == "6/" ~ "summer",
-    str_sub(decision_date,1,1) == "7/" ~ "summer",
-    str_sub(decision_date,1,1) == "8/" ~ "summer",
-    str_sub(decision_date,1,1) == "9/" ~ "fall",
-    str_sub(decision_date,1,2) == "10/" ~ "fall",
-    str_sub(decision_date,1,2) == "11/" ~ "fall",
-    str_sub(decision_date,1,2) == "12/" ~ "winter"
+    str_sub(decision_date,1,2) == "6/" ~ "summer",
+    str_sub(decision_date,1,2) == "7/" ~ "summer",
+    str_sub(decision_date,1,2) == "8/" ~ "summer",
+    str_sub(decision_date,1,2) == "9/" ~ "fall",
+    str_sub(decision_date,1,3) == "10/" ~ "fall",
+    str_sub(decision_date,1,3) == "11/" ~ "fall",
+    str_sub(decision_date,1,3) == "12/" ~ "winter",
+    str_sub(decision_date,3,5) == "Jan" ~ "winter",
+    str_sub(decision_date,4,6) == "Jan" ~ "winter",
+    str_sub(decision_date,3,5) == "Feb" ~ "winter",
+    str_sub(decision_date,4,6) == "Feb" ~ "winter",
+    str_sub(decision_date,3,5) == "Mar" ~ "spring",
+    str_sub(decision_date,4,6) == "Mar" ~ "spring",
+    str_sub(decision_date,3,5) == "Apr" ~ "spring",
+    str_sub(decision_date,4,6) == "Apr" ~ "spring",
+    str_sub(decision_date,3,5) == "May" ~ "spring",
+    str_sub(decision_date,4,6) == "May" ~ "spring",
+    str_sub(decision_date,3,5) == "Jun" ~ "summer",
+    str_sub(decision_date,4,6) == "Jun" ~ "summer",
+    str_sub(decision_date,3,5) == "Jul" ~ "summer",
+    str_sub(decision_date,4,6) == "Jul" ~ "summer",
+    str_sub(decision_date,3,5) == "Aug" ~ "summer",
+    str_sub(decision_date,4,6) == "Aug" ~ "summer",
+    str_sub(decision_date,3,5) == "Sep" ~ "fall",
+    str_sub(decision_date,4,6) == "Sep" ~ "fall",
+    str_sub(decision_date,3,5) == "Oct" ~ "fall",
+    str_sub(decision_date,4,6) == "Oct" ~ "fall",
+    str_sub(decision_date,3,5) == "Nov" ~ "fall",
+    str_sub(decision_date,4,6) == "Nov" ~ "fall",
+    str_sub(decision_date,3,5) == "Dec" ~ "winter",
+    str_sub(decision_date,4,6) == "Dec" ~ "winter",
   ))
+
+h2b <- h2b %>%
+  mutate(submitted_season = case_when(
+    str_sub(npc_submitted_date,1,2) == "1/" ~ "winter",
+    str_sub(npc_submitted_date,1,2) == "2/" ~ "winter",
+    str_sub(npc_submitted_date,1,2) == "3/" ~ "spring",
+    str_sub(npc_submitted_date,1,2) == "4/" ~ "spring",
+    str_sub(npc_submitted_date,1,2) == "5/" ~ "spring",
+    str_sub(npc_submitted_date,1,2) == "6/" ~ "summer",
+    str_sub(npc_submitted_date,1,2) == "7/" ~ "summer",
+    str_sub(npc_submitted_date,1,2) == "8/" ~ "summer",
+    str_sub(npc_submitted_date,1,2) == "9/" ~ "fall",
+    str_sub(npc_submitted_date,1,3) == "10/" ~ "fall",
+    str_sub(npc_submitted_date,1,3) == "11/" ~ "fall",
+    str_sub(npc_submitted_date,1,3) == "12/" ~ "winter",
+    str_sub(npc_submitted_date,3,5) == "Jan" ~ "winter",
+    str_sub(npc_submitted_date,4,6) == "Jan" ~ "winter",
+    str_sub(npc_submitted_date,3,5) == "Feb" ~ "winter",
+    str_sub(npc_submitted_date,4,6) == "Feb" ~ "winter",
+    str_sub(npc_submitted_date,3,5) == "Mar" ~ "spring",
+    str_sub(npc_submitted_date,4,6) == "Mar" ~ "spring",
+    str_sub(npc_submitted_date,3,5) == "Apr" ~ "spring",
+    str_sub(npc_submitted_date,4,6) == "Apr" ~ "spring",
+    str_sub(npc_submitted_date,3,5) == "May" ~ "spring",
+    str_sub(npc_submitted_date,4,6) == "May" ~ "spring",
+    str_sub(npc_submitted_date,3,5) == "Jun" ~ "summer",
+    str_sub(npc_submitted_date,4,6) == "Jun" ~ "summer",
+    str_sub(npc_submitted_date,3,5) == "Jul" ~ "summer",
+    str_sub(npc_submitted_date,4,6) == "Jul" ~ "summer",
+    str_sub(npc_submitted_date,3,5) == "Aug" ~ "summer",
+    str_sub(npc_submitted_date,4,6) == "Aug" ~ "summer",
+    str_sub(npc_submitted_date,3,5) == "Sep" ~ "fall",
+    str_sub(npc_submitted_date,4,6) == "Sep" ~ "fall",
+    str_sub(npc_submitted_date,3,5) == "Oct" ~ "fall",
+    str_sub(npc_submitted_date,4,6) == "Oct" ~ "fall",
+    str_sub(npc_submitted_date,3,5) == "Nov" ~ "fall",
+    str_sub(npc_submitted_date,4,6) == "Nov" ~ "fall",
+    str_sub(npc_submitted_date,3,5) == "Dec" ~ "winter",
+    str_sub(npc_submitted_date,4,6) == "Dec" ~ "winter",
+  ))
+
   
-h2b_test %>%
-  filter(season == "spring") %>%
-  select(decision_date, season)
   
 ```
 
-
-```{r - mutate_season}
-# 
-# h2b_1 <- h2b %>%
-#   separate(decision_date, c('decision_month', 'decision_day', 'decision_year'), sep="/", remove = FALSE) 
-# 
-# h2b_2 <- h2b %>%
-#   separate(npc_submitted_date, c('submitted_month', 'submitted_day', 'submitted_year'), sep="/", remove = FALSE)
-# 
-# h2b_filter_1 <- h2b_1 %>%
-#   #filter(decision_day == "NA") %>%
-#   separate(decision_date, c('decision_day', 'decision_month', 'decision_year'), sep="-", remove = FALSE) 
-# 
-# h2b_1 <- h2b_1 %>%
-#   filter(decision_day != "NA")
-# 
-# h2b_filter_2 <- h2b_2 %>%
-#   #filter(submitted_day == "NA") %>%
-#     separate(npc_submitted_date, c('submitted_day', 'submitted_month', 'submitted_year'), sep = "-", remove = FALSE)
-# 
-# h2b_2 <- h2b_2  %>%
-#   filter(submitted_day != "NA")
-# 
-# h2b <- h2b_1 %>%
-#   full_join(h2b_2) 
-#   
-# h2b_filter <- h2b_filter_1 %>%
-#   full_join(h2b_filter_2)
-# 
-# h2b <- h2b %>%
-#   full_join(h2b_filter)
-# 
-# h2b <- h2b %>%
-#   mutate(decision_season = case_when(
-#     decision_month == "1" ~ "winter", 
-#     decision_month == "2" ~ "winter",
-#     decision_month == "3" ~ "spring",
-#     decision_month == "4" ~ "spring",
-#     decision_month == "5" ~ "spring",
-#     decision_month == "6" ~ "summer",
-#     decision_month == "7" ~ "summer",
-#     decision_month == "8" ~ "summer",
-#     decision_month == "9" ~ "fall",
-#     decision_month == "10" ~ "fall", 
-#     decision_month == "11" ~ "fall",
-#     decision_month == "12" ~ "winter",
-#     decision_month == "Jan" ~ "winter", 
-#     decision_month == "Feb" ~ "winter",
-#     decision_month == "Mar" ~ "spring",
-#     decision_month == "Apr" ~ "spring",
-#     decision_month == "May" ~ "spring",
-#     decision_month == "Jun" ~ "summer",
-#     decision_month == "Jul" ~ "summer",
-#     decision_month == "Aug" ~ "summer",
-#     decision_month == "Sep" ~ "fall",
-#     decision_month == "Oct" ~ "fall", 
-#     decision_month == "Nov" ~ "fall",
-#     decision_month == "Dec" ~ "winter"
-#   ))
-# 
-# h2b <- h2b %>%
-#   mutate(submitted_season = case_when(
-#     submitted_month == "1" ~ "winter", 
-#     submitted_month == "2" ~ "winter",
-#     submitted_month == "3" ~ "spring",
-#     submitted_month == "4" ~ "spring",
-#     submitted_month == "5" ~ "spring",
-#     submitted_month == "6" ~ "summer",
-#     submitted_month == "7" ~ "summer",
-#     submitted_month == "8" ~ "summer",
-#     submitted_month == "9" ~ "fall",
-#     submitted_month == "10" ~ "fall", 
-#     submitted_month == "11" ~ "fall",
-#     submitted_month == "12" ~ "winter",
-#     submitted_month == "Jan" ~ "winter", 
-#     submitted_month == "Feb" ~ "winter",
-#     submitted_month == "Mar" ~ "spring",
-#     submitted_month == "Apr" ~ "spring",
-#     submitted_month == "May" ~ "spring",
-#     submitted_month == "Jun" ~ "summer",
-#     submitted_month == "Jul" ~ "summer",
-#     submitted_month == "Aug" ~ "summer",
-#     submitted_month == "Sep" ~ "fall",
-#     submitted_month == "Oct" ~ "fall", 
-#     submitted_month == "Nov" ~ "fall",
-#     submitted_month == "Dec" ~ "winter"
-#   ))
-
-```
 
 ```{r-mutate_region}
 h2b <- h2b %>%
@@ -309,7 +285,7 @@ h2b_cv %>%
 test_fold <- 1
 test <- h2b_cv %>% filter(fold == test_fold)
 train <- h2b_cv %>% anti_join(test, by = "id")
-mod <- lm(prop_workers_certified ~ occupation_category + prevailing_wage + season + region + nbur_workers_requested, data = train)
-(rmse_test1 <- rmse(mod, test))
+mod <- lm(prop_workers_certified ~ occupation_category + prevailing_wage + submitted_season + region + nbur_workers_requested, data = train)
+# (rmse_test1 <- rmse(mod, test))
 ```
 
