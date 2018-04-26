@@ -18,6 +18,10 @@ library(maps)
 
 ```
 
+```{r-seed}
+set.seed(1234)
+```
+
 
 ```{r join-data, echo = FALSE, message=FALSE}
 h2b2008 <- read_csv("data/H-2B_FY2008.csv") %>%
@@ -91,7 +95,6 @@ h2b <- h2b %>%
 ```{r}
 h2b_test <- h2b %>%
   mutate(season = case_when(
-    pmatch("Apr", decision_date) ~ "spring",
     str_sub(decision_date,1,2) == "1/" ~ "winter",
     str_sub(decision_date,1,2) == "2/" ~ "winter",
     str_sub(decision_date,1,2) == "3/" ~ "spring",
@@ -292,5 +295,21 @@ In 2008, Congress failed to renew the Save Our Small and Seasonal Bussinesses Ac
 ```{r-mutate-prop-certified}
 h2b <- h2b %>%
   mutate(prop_workers_certified = nbr_workers_certified/nbur_workers_requested) 
+```
+
+```{r}
+h2b_cv <- h2b %>%
+  mutate(id = 1:n()) %>%
+  sample_n(nrow(h2b)) %>%
+  mutate(fold = (((1:n()) - 1) %% 5) + 1 )
+
+h2b_cv %>% 
+  count(fold)
+
+test_fold <- 1
+test <- h2b_cv %>% filter(fold == test_fold)
+train <- h2b_cv %>% anti_join(test, by = "id")
+mod <- lm(prop_workers_certified ~ occupation_category + prevailing_wage + season + region + nbur_workers_requested, data = train)
+(rmse_test1 <- rmse(mod, test))
 ```
 

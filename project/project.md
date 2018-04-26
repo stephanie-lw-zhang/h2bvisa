@@ -32,20 +32,20 @@ PROJECT TITLE
 
 ### Data Manipulation
 
-    ## # A tibble: 3,277 x 2
+    ## # A tibble: 2,729 x 2
     ##    decision_date season
     ##    <chr>         <chr> 
-    ##  1 2/1/08        winter
-    ##  2 2/1/08        winter
-    ##  3 2/1/08        winter
-    ##  4 2/1/08        winter
-    ##  5 2/1/08        winter
-    ##  6 2/1/08        winter
-    ##  7 2/1/08        winter
-    ##  8 2/1/08        winter
-    ##  9 2/1/08        winter
-    ## 10 2/1/08        winter
-    ## # ... with 3,267 more rows
+    ##  1 3/3/08        spring
+    ##  2 3/3/08        spring
+    ##  3 3/3/08        spring
+    ##  4 3/3/08        spring
+    ##  5 3/3/08        spring
+    ##  6 3/3/08        spring
+    ##  7 3/3/08        spring
+    ##  8 3/3/08        spring
+    ##  9 3/3/08        spring
+    ## 10 3/3/08        spring
+    ## # ... with 2,719 more rows
 
 ### Visualizations
 
@@ -58,3 +58,12 @@ In 2008, Congress failed to renew the Save Our Small and Seasonal Bussinesses Ac
 ### Hypothesis Tests
 
 ### Regression Model
+
+    ## # A tibble: 5 x 2
+    ##    fold     n
+    ##   <dbl> <int>
+    ## 1    1.  6285
+    ## 2    2.  6285
+    ## 3    3.  6284
+    ## 4    4.  6284
+    ## 5    5.  6284
