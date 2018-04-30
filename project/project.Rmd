@@ -260,8 +260,6 @@ h2b %>%
 
 In 2008, Congress failed to renew the Save Our Small and Seasonal Bussinesses Act (SOSSBA). This reduced the cap for the total number of H2B Visas that could be approved every year. 
 
-### Hypothesis Tests
-
 ### Regression Model
 ```{r-mutate-prop-certified}
 h2b <- h2b %>%
