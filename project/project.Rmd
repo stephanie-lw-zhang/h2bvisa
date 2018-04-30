@@ -93,7 +93,10 @@ h2b <- h2b %>%
 
 ```
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8cb8556dc4f35c4c648af3cf2060a1ac27f4cc21
 ```{r - mutate_season}
 h2b <- h2b %>%
   mutate(decision_season = case_when(
