@@ -10,7 +10,7 @@ runtime: shiny
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-```{r - install_packages}
+```{r - install_packages, include=FALSE}
 library(tidyverse)
 library(readxl)
 library(stringr)
@@ -410,6 +410,18 @@ server <- function(input, output) {
 
 shinyApp(ui = ui, server = server)
 ```
+
+```{r state-proportions}
+state_props %>%
+  summarise(min = min(prop), 
+            q1 = quantile(prop, c(0.25)),
+            median = median(prop),
+            q3 = quantile(prop, c(0.75)),
+            max = max(prop),
+            mean = mean(prop),
+            sd = sd(prop))
+```
+
 
 ```{r - bar graphs}
 ui <- fluidPage(
