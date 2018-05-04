@@ -14,7 +14,6 @@ knitr::opts_chunk$set(echo = FALSE)
 library(tidyverse)
 library(readxl)
 library(stringr)
-library(lubridate)
 library(maps)
 library(Metrics)
 library(shiny)
@@ -406,7 +405,39 @@ server <- function(input, output) {
 shinyApp(ui = ui, server = server)
 ```
 
+```{r - bar graphs}
+ui <- fluidPage(
+  titlePanel("H2B Visa Data"),
+  sidebarLayout(
+    sidebarPanel(
+      selectInput(inputId = "category", label = "Categories",
+                  choices = c("Case Status" = "case_status",
+                              "Job Category" = "occupation_category", 
+                              "Region" = "region",
+                              "Submitted Season" = "submitted_season",
+                              "Decision Season" = "decision_season",
+                              "Difference in Prevailing and Basic Wage" = "wage_diff"),
+                  selected = "Case Status")
+    ),
+    mainPanel(
+      plotOutput(outputId = "bar_graph")
+    )
+  )
 
+  
+)
 
+server <- function(input, output) {
+  output$bar_graph <- renderPlot({
+    ggplot(mapping = aes(x = input$category, y = count(input$category)) +
+      geom_bar(position = "dodge", stat="identity") + theme_minimal() + 
+      labs( x=input$category, y="count")
+    
+      )
+  })
+}
+
+shinyApp(ui = ui, server = server)
+```
 
 
