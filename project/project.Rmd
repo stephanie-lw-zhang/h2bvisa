@@ -276,32 +276,58 @@ selected_mod <- step(mod, direction = "backward")
 ```
 
 ###Shiny
-```{r}
-ui <- fluidPage(
-  titlePanel("Multiply by 3"),
-  sidebarLayout(
-    sidebarPanel( 
-      sliderInput("x", 
-                  "Select x", 
-                  min = 1, max = 50, 
-                  value = 30) 
-    ),
-    mainPanel( 
-      textOutput("x_updated") 
-    ) 
-  )
-)
 
-# Server ----
-server <- function(input, output) {
-  mult_3           <- function(x) { x * 3 }
-  current_x        <- reactive({ mult_3(input$x) })
-  output$x_updated <- renderText({ current_x() })
-}
+```{r map-wage}
+state_wages <- h2b %>%
+  filter(!is.na(basic_rate_of_pay) & !(is.na(basic_unit_of_pay))) %>%
+  filter(employer_state %in% state.abb | employer_state == "DC") %>%
+  filter(employer_state != "HI" & employer_state!="AK") %>%
+  filter(basic_unit_of_pay == "HR") %>%
+  mutate(region = case_when(employer_state %in% state.abb ~ tolower(setNames(state.name, state.abb))[employer_state], employer_state == "DC" ~ "district of columbia")) %>%
+  group_by(region) %>%
+  summarise(median_wage = median(basic_rate_of_pay))
 
-# Create Shiny app object
-shinyApp(ui, server)
+map <- merge(state_wages, map, sort = FALSE, by = "region")
 ```
+
+```{r map-occupation}
+state_occ <- h2b %>%
+  filter(!is.na(occupation_category)) %>%
+  filter(employer_state %in% state.abb | employer_state == "DC") %>%
+  filter(employer_state != "HI" & employer_state!="AK") %>%
+  mutate(region = case_when(employer_state %in% state.abb ~ tolower(setNames(state.name, state.abb))[employer_state], employer_state == "DC" ~ "district of columbia")) %>% 
+   group_by(region) %>%
+   count(region, occupation_category) %>%
+  slice(which.max(n))
+
+map <- merge(state_occ, map, sort = FALSE, by = "region")
+
+```
+
+```{r map-season}
+state_season <- h2b %>%
+  filter(!is.na(submitted_season)) %>%
+  filter(employer_state %in% state.abb | employer_state == "DC") %>%
+  filter(employer_state != "HI" & employer_state!="AK") %>%
+  mutate(region = case_when(employer_state %in% state.abb ~ tolower(setNames(state.name, state.abb))[employer_state], employer_state == "DC" ~ "district of columbia")) %>% 
+   group_by(region) %>%
+   count(region, submitted_season) %>%
+  slice(which.max(n))
+
+map <- merge(state_season, map, sort = FALSE, by = "region")
+```
+
+```{r map-total}
+state_total <- h2b %>%
+  filter(employer_state %in% state.abb | employer_state == "DC") %>%
+  filter(employer_state != "HI" & employer_state!="AK") %>%
+  mutate(region = case_when(employer_state %in% state.abb ~ tolower(setNames(state.name, state.abb))[employer_state], employer_state == "DC" ~ "district of columbia")) %>% 
+   group_by(region) %>%
+   summarise(n = n())
+
+map <- merge(state_total, map, sort = FALSE, by = "region")
+```
+
 
 ```{r shiny-map}
 ui <- fluidPage(
@@ -309,7 +335,11 @@ ui <- fluidPage(
       sidebarLayout(
         sidebarPanel(
           selectInput(inputId = "fill", label = "Fill Map By",
-          choices = c("Proportion approved" = "prop"),
+          choices = c("Proportion approved" = "prop",
+                      "Total applications" = "n", 
+                      "Median hourly wage" = "median_wage",
+                      "Most popular occupation" = "occupation_category",
+                      "Most popular season" = "submitted_season"),
           selected = "Proportion approved")
         ),
        mainPanel(
