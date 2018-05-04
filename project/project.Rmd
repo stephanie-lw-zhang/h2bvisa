@@ -174,6 +174,46 @@ h2b <- h2b %>%
     str_sub(npc_submitted_date,3,5) == "Dec" ~ "winter",
     str_sub(npc_submitted_date,4,6) == "Dec" ~ "winter",
   ))
+
+h2b <- h2b %>%
+  mutate(start_season = case_when(
+    str_sub(certification_begin_date,1,2) == "1/" ~ "winter",
+    str_sub(certification_begin_date,1,2) == "2/" ~ "winter",
+    str_sub(certification_begin_date,1,2) == "3/" ~ "spring",
+    str_sub(certification_begin_date,1,2) == "4/" ~ "spring",
+    str_sub(certification_begin_date,1,2) == "5/" ~ "spring",
+    str_sub(certification_begin_date,1,2) == "6/" ~ "summer",
+    str_sub(certification_begin_date,1,2) == "7/" ~ "summer",
+    str_sub(certification_begin_date,1,2) == "8/" ~ "summer",
+    str_sub(certification_begin_date,1,2) == "9/" ~ "fall",
+    str_sub(certification_begin_date,1,3) == "10/" ~ "fall",
+    str_sub(certification_begin_date,1,3) == "11/" ~ "fall",
+    str_sub(certification_begin_date,1,3) == "12/" ~ "winter",
+    str_sub(certification_begin_date,3,5) == "Jan" ~ "winter",
+    str_sub(certification_begin_date,4,6) == "Jan" ~ "winter",
+    str_sub(certification_begin_date,3,5) == "Feb" ~ "winter",
+    str_sub(certification_begin_date,4,6) == "Feb" ~ "winter",
+    str_sub(certification_begin_date,3,5) == "Mar" ~ "spring",
+    str_sub(certification_begin_date,4,6) == "Mar" ~ "spring",
+    str_sub(certification_begin_date,3,5) == "Apr" ~ "spring",
+    str_sub(certification_begin_date,4,6) == "Apr" ~ "spring",
+    str_sub(certification_begin_date,3,5) == "May" ~ "spring",
+    str_sub(certification_begin_date,4,6) == "May" ~ "spring",
+    str_sub(certification_begin_date,3,5) == "Jun" ~ "summer",
+    str_sub(certification_begin_date,4,6) == "Jun" ~ "summer",
+    str_sub(certification_begin_date,3,5) == "Jul" ~ "summer",
+    str_sub(certification_begin_date,4,6) == "Jul" ~ "summer",
+    str_sub(certification_begin_date,3,5) == "Aug" ~ "summer",
+    str_sub(certification_begin_date,4,6) == "Aug" ~ "summer",
+    str_sub(certification_begin_date,3,5) == "Sep" ~ "fall",
+    str_sub(certification_begin_date,4,6) == "Sep" ~ "fall",
+    str_sub(certification_begin_date,3,5) == "Oct" ~ "fall",
+    str_sub(certification_begin_date,4,6) == "Oct" ~ "fall",
+    str_sub(certification_begin_date,3,5) == "Nov" ~ "fall",
+    str_sub(certification_begin_date,4,6) == "Nov" ~ "fall",
+    str_sub(certification_begin_date,3,5) == "Dec" ~ "winter",
+    str_sub(certification_begin_date,4,6) == "Dec" ~ "winter",
+  ))
 ```
 
 
@@ -306,12 +346,12 @@ map <- merge(state_occ, map, sort = FALSE, by = "region")
 
 ```{r map-season}
 state_season <- h2b %>%
-  filter(!is.na(submitted_season)) %>%
+  filter(!is.na(start_season)) %>%
   filter(employer_state %in% state.abb | employer_state == "DC") %>%
   filter(employer_state != "HI" & employer_state!="AK") %>%
   mutate(region = case_when(employer_state %in% state.abb ~ tolower(setNames(state.name, state.abb))[employer_state], employer_state == "DC" ~ "district of columbia")) %>% 
    group_by(region) %>%
-   count(region, submitted_season) %>%
+   count(region, start_season) %>%
   slice(which.max(n))
 
 map <- merge(state_season, map, sort = FALSE, by = "region")
@@ -339,7 +379,7 @@ ui <- fluidPage(
                       "Total applications" = "n", 
                       "Median hourly wage" = "median_wage",
                       "Most popular occupation" = "occupation_category",
-                      "Most popular season" = "submitted_season"),
+                      "Most popular season" = "start_season"),
           selected = "Proportion approved")
         ),
        mainPanel(
