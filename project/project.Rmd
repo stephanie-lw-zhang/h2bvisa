@@ -2,7 +2,11 @@
 title: "PROJECT TITLE"
 author: "24-7"
 date: "4-20-18"
+<<<<<<< HEAD
 output: github_document
+=======
+output: html_document
+>>>>>>> 6b3ca37747a0723df561d971d364fc3df909348b
 runtime: shiny
 ---
 
@@ -14,7 +18,6 @@ knitr::opts_chunk$set(echo = FALSE)
 library(tidyverse)
 library(readxl)
 library(stringr)
-library(lubridate)
 library(maps)
 library(Metrics)
 library(shiny)
@@ -93,6 +96,7 @@ h2b <- h2b %>%
   
 
 ```
+
 
 ```{r - mutate_season}
 h2b <- h2b %>%
@@ -174,10 +178,53 @@ h2b <- h2b %>%
     str_sub(npc_submitted_date,3,5) == "Dec" ~ "winter",
     str_sub(npc_submitted_date,4,6) == "Dec" ~ "winter",
   ))
+
+h2b <- h2b %>%
+  mutate(start_season = case_when(
+    str_sub(certification_begin_date,1,2) == "1/" ~ "winter",
+    str_sub(certification_begin_date,1,2) == "2/" ~ "winter",
+    str_sub(certification_begin_date,1,2) == "3/" ~ "spring",
+    str_sub(certification_begin_date,1,2) == "4/" ~ "spring",
+    str_sub(certification_begin_date,1,2) == "5/" ~ "spring",
+    str_sub(certification_begin_date,1,2) == "6/" ~ "summer",
+    str_sub(certification_begin_date,1,2) == "7/" ~ "summer",
+    str_sub(certification_begin_date,1,2) == "8/" ~ "summer",
+    str_sub(certification_begin_date,1,2) == "9/" ~ "fall",
+    str_sub(certification_begin_date,1,3) == "10/" ~ "fall",
+    str_sub(certification_begin_date,1,3) == "11/" ~ "fall",
+    str_sub(certification_begin_date,1,3) == "12/" ~ "winter",
+    str_sub(certification_begin_date,3,5) == "Jan" ~ "winter",
+    str_sub(certification_begin_date,4,6) == "Jan" ~ "winter",
+    str_sub(certification_begin_date,3,5) == "Feb" ~ "winter",
+    str_sub(certification_begin_date,4,6) == "Feb" ~ "winter",
+    str_sub(certification_begin_date,3,5) == "Mar" ~ "spring",
+    str_sub(certification_begin_date,4,6) == "Mar" ~ "spring",
+    str_sub(certification_begin_date,3,5) == "Apr" ~ "spring",
+    str_sub(certification_begin_date,4,6) == "Apr" ~ "spring",
+    str_sub(certification_begin_date,3,5) == "May" ~ "spring",
+    str_sub(certification_begin_date,4,6) == "May" ~ "spring",
+    str_sub(certification_begin_date,3,5) == "Jun" ~ "summer",
+    str_sub(certification_begin_date,4,6) == "Jun" ~ "summer",
+    str_sub(certification_begin_date,3,5) == "Jul" ~ "summer",
+    str_sub(certification_begin_date,4,6) == "Jul" ~ "summer",
+    str_sub(certification_begin_date,3,5) == "Aug" ~ "summer",
+    str_sub(certification_begin_date,4,6) == "Aug" ~ "summer",
+    str_sub(certification_begin_date,3,5) == "Sep" ~ "fall",
+    str_sub(certification_begin_date,4,6) == "Sep" ~ "fall",
+    str_sub(certification_begin_date,3,5) == "Oct" ~ "fall",
+    str_sub(certification_begin_date,4,6) == "Oct" ~ "fall",
+    str_sub(certification_begin_date,3,5) == "Nov" ~ "fall",
+    str_sub(certification_begin_date,4,6) == "Nov" ~ "fall",
+    str_sub(certification_begin_date,3,5) == "Dec" ~ "winter",
+    str_sub(certification_begin_date,4,6) == "Dec" ~ "winter",
+  ))
+
+h2b <- h2b %>%
+  mutate(time = paste(year, submitted_season, sep = " ", collapse = NULL))
 ```
 
 
-```{r-mutate_region}
+```{r - mutate_region}
 h2b <- h2b %>%
   mutate(region = case_when(
     employer_state == "WA" | employer_state == "OR" | employer_state == "CA" |  employer_state == "ID" | employer_state == "MT" | employer_state == "WY" | employer_state == "NV" | employer_state == "UT" | employer_state == "CO" | employer_state == "AZ" | employer_state == "NM" | employer_state == "AK" | employer_state == "HI" ~ "West",
@@ -187,7 +234,7 @@ h2b <- h2b %>%
   ))
 ```
 
-```{r-mutate_job_categories}
+```{r - mutate_job_categories}
 h2b <- h2b %>%
   mutate(occupation_category = case_when(
     str_sub(dot_occupational_code,1,1) == "0" | str_sub(dot_occupational_code,1,1) == "1" ~ "professional, technical, and managerial",
@@ -275,33 +322,228 @@ selected_mod <- step(mod, direction = "backward")
 (selected_mod)
 ```
 
-###Shiny
-```{r shiny-app, echo = FALSE}
-ui <- fluidPage(
-  titlePanel("Multiply by 3"),
-  sidebarLayout(
-    sidebarPanel( 
-      sliderInput("x", 
-                  "Select x", 
-                  min = 1, max = 50, 
-                  value = 30) 
-    ),
-    mainPanel( 
-      textOutput("x_updated") 
-    ) 
-  )
-)
 
-# Server ----
+###Shiny
+
+```{r map-wage}
+state_wages <- h2b %>%
+  filter(!is.na(basic_rate_of_pay) & !(is.na(basic_unit_of_pay))) %>%
+  filter(employer_state %in% state.abb | employer_state == "DC") %>%
+  filter(employer_state != "HI" & employer_state!="AK") %>%
+  filter(basic_unit_of_pay == "HR") %>%
+  mutate(region = case_when(employer_state %in% state.abb ~ tolower(setNames(state.name, state.abb))[employer_state], employer_state == "DC" ~ "district of columbia")) %>%
+  group_by(region) %>%
+  summarise(median_wage = median(basic_rate_of_pay))
+
+map <- merge(state_wages, map, sort = FALSE, by = "region")
+```
+
+```{r map-occupation}
+state_occ <- h2b %>%
+  filter(!is.na(occupation_category)) %>%
+  filter(employer_state %in% state.abb | employer_state == "DC") %>%
+  filter(employer_state != "HI" & employer_state!="AK") %>%
+  mutate(region = case_when(employer_state %in% state.abb ~ tolower(setNames(state.name, state.abb))[employer_state], employer_state == "DC" ~ "district of columbia")) %>% 
+   group_by(region) %>%
+   count(region, occupation_category) %>%
+  slice(which.max(n))
+
+map <- merge(state_occ, map, sort = FALSE, by = "region")
+
+```
+
+```{r map-season}
+state_season <- h2b %>%
+  filter(!is.na(start_season)) %>%
+  filter(employer_state %in% state.abb | employer_state == "DC") %>%
+  filter(employer_state != "HI" & employer_state!="AK") %>%
+  mutate(region = case_when(employer_state %in% state.abb ~ tolower(setNames(state.name, state.abb))[employer_state], employer_state == "DC" ~ "district of columbia")) %>% 
+   group_by(region) %>%
+   count(region, start_season) %>%
+  slice(which.max(n))
+
+map <- merge(state_season, map, sort = FALSE, by = "region")
+```
+
+```{r map-total}
+state_total <- h2b %>%
+  filter(employer_state %in% state.abb | employer_state == "DC") %>%
+  filter(employer_state != "HI" & employer_state!="AK") %>%
+  mutate(region = case_when(employer_state %in% state.abb ~ tolower(setNames(state.name, state.abb))[employer_state], employer_state == "DC" ~ "district of columbia")) %>% 
+   group_by(region) %>%
+   summarise(n = n())
+
+map <- merge(state_total, map, sort = FALSE, by = "region")
+```
+
+
+```{r shiny-map}
+ui <- fluidPage(
+      titlePanel("H2B visas by state"),
+      sidebarLayout(
+        sidebarPanel(
+          selectInput(inputId = "fill", label = "Fill Map By",
+          choices = c("Wage" = "prop",
+                      "Total applications" = "n", 
+                      "Median hourly wage" = "median_wage",
+                      "Most popular occupation" = "occupation_category",
+                      "Most popular season" = "start_season"),
+          selected = "Proportion approved")
+        ),
+       mainPanel(
+         plotOutput(outputId = "map")
+       )
+      )
+      
+  )
+
 server <- function(input, output) {
-  mult_3           <- function(x) { x * 3 }
-  current_x        <- reactive({ mult_3(input$x) })
-  output$x_updated <- renderText({ current_x() })
+  output$map <- renderPlot({
+  ggplot(data = map) + 
+  geom_polygon(aes_string(x = "long", y = "lat", group = "group", fill = input$fill), color = "white") +
+  coord_fixed(1.5) + 
+  labs(
+       x = "Longitude",
+       y = "Latitude"
+       )
+  })
 }
 
-# Create Shiny app object
+shinyApp(ui = ui, server = server)
+```
+
+```{r - scatterplot}
+ui <- fluidPage(
+  titlePanel("H2B Visa Plots"),
+  sidebarLayout(
+    sidebarPanel(
+      
+      # Subtitle
+      h4("Plot"),
+      
+      # Select variable for y-axis
+      selectInput(inputId = "y", 
+                  label = "Y-axis:",
+                  choices = c("Wage" = "basic_rate_of_pay", 
+                              "Number of Workers Requested" = "nbur_workers_requested", 
+                              "Number of Workers Certified" = "nbr_workers_certified"),
+                  selected = "basic_rate_of_pay"),
+      
+      # Select variable for x-axis
+      selectInput(inputId = "x", 
+                  label = "X-axis:",
+                  choices = c("Time" = "time", 
+                              "Wage" = "basic_rate_of_pay", 
+                              "Number of Workers Requested" = "nbur_workers_requested", 
+                              "Number of Workers Certified" = "nbr_workers_certified"), 
+                  selected = "time"),
+      
+      # Select variable for color
+      selectInput(inputId = "z", 
+                  label = "Color by:",
+                  choices = c("Job Category" = "occupation_category", 
+                              "Season (submitted)" = "submitted_season", 
+                              "Year" = "year", 
+                              "Region" = "region"),
+                  selected = "occupation_category"),
+      
+      # Set alpha level
+      sliderInput(inputId = "alpha", 
+                  label = "Alpha:", 
+                  min = 0, max = 1, 
+                  value = 0.5),
+    ),
+    # Output:
+    mainPanel(
+      
+      # Show scatterplot
+      plotOutput(outputId = "scatterplot"),
+      br(), br(),    # a little bit of visual separation
+    )
+  )
+)
+  
+  # Define server function --------------------------------------------
+server <- function(input, output) {
+  
+  # Create a subset of data filtering for selected title types
+  visa_sample <- eventReactive(
+    # when button is clicked
+    input$sample_button, { 
+      
+      # take a sample
+      movies %>% sample_n(input$sample_size) 
+      
+      },
+    ignoreNULL = FALSE
+    )
+  
+  # Write random sample to csv
+  observeEvent(
+    # when button is clicked
+    input$write_csv, {
+      
+      # clean up text for now
+      now <- Sys.time() %>%
+        str_replace_all("\\:", "-") %>%
+        str_replace(" ", "_")
+      # create a filename with movies_sample and timestamp
+      filename <- paste0("movies_sample_", now,".csv")
+      # write csv
+      write_csv(movies_sample(), path = filename)
+      
+      }
+    )
+  
+  # Create scatterplot object the plotOutput function is expecting
+  output$scatterplot <- renderPlot({
+    ggplot(data = visa_sample(), aes_string(x = input$x, y = input$y,
+                                              color = input$z)) +
+      geom_point(alpha = isolate({ input$alpha }) ) +
+      labs(x = toTitleCase(str_replace_all(input$x, "_", " ")),
+           y = toTitleCase(str_replace_all(input$y, "_", " ")),
+           color = toTitleCase(str_replace_all(input$z, "_", " ")))
+  })
+  
+}
+
+# Create the Shiny app object ---------------------------------------
 shinyApp(ui, server)
 ```
 
+```{r - bar graphs}
+# ui <- fluidPage(
+#   titlePanel("H2B Visa Data"),
+#   sidebarLayout(
+#     sidebarPanel(
+#       selectInput(inputId = "category", label = "Categories",
+#                   choices = c("Case Status" = "case_status",
+#                               "Job Category" = "occupation_category", 
+#                               "Region" = "region",
+#                               "Submitted Season" = "submitted_season",
+#                               "Decision Season" = "decision_season",
+#                               "Difference in Prevailing and Basic Wage" = "wage_diff"),
+#                   selected = "Case Status"),
+# 
+#     
+#     mainPanel(
+#       plotOutput(outputId = "bar_graph")
+#     )
+#   )
+# 
+#   
+# 
+# server <- function(input, output) {
+#   output$bar_graph <- renderPlot({
+#     ggplot(mapping = aes(x = input$category, y = count(input$category)) +
+#       geom_bar(position = "dodge", stat="identity") + theme_minimal() + 
+#       labs( x=input$category, y="count")
+#     
+#       )
+#   })
+# }
+# 
+# shinyApp(ui = ui, server = server)
+```
 
 

@@ -3,14 +3,24 @@ PROJECT TITLE
 24-7
 4-20-18
 
-    ## ── Attaching packages ───────────────────────────── tidyverse 1.2.1 ──
+    ## Warning: running command 'timedatectl' had status 1
+
+<<<<<<< HEAD
+    ## ── Attaching packages ─────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+=======
+    ## ── Attaching packages ───────────────────────────────────────────── tidyverse 1.2.1 ──
+>>>>>>> b8139a78a56605883444bc5363b10476d3d5d130
 
     ## ✔ ggplot2 2.2.1     ✔ purrr   0.2.4
-    ## ✔ tibble  1.4.2     ✔ dplyr   0.7.4
-    ## ✔ tidyr   0.8.0     ✔ stringr 1.3.0
-    ## ✔ readr   1.1.1     ✔ forcats 0.3.0
+    ## ✔ tibble  1.4.1     ✔ dplyr   0.7.4
+    ## ✔ tidyr   0.7.2     ✔ stringr 1.2.0
+    ## ✔ readr   1.1.1     ✔ forcats 0.2.0
 
-    ## ── Conflicts ──────────────────────────────── tidyverse_conflicts() ──
+<<<<<<< HEAD
+    ## ── Conflicts ────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+=======
+    ## ── Conflicts ──────────────────────────────────────────────── tidyverse_conflicts() ──
+>>>>>>> b8139a78a56605883444bc5363b10476d3d5d130
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
 
@@ -103,10 +113,3 @@ In 2008, Congress failed to renew the Save Our Small and Seasonal Bussinesses Ac
     ##                                                  6.584e-03  
     ##                                                 regionWest  
     ##                                                 -1.104e-02
-
-### Shiny
-
-<!--html_preserve-->
-Shiny applications not supported in static R Markdown documents
-
-<!--/html_preserve-->
