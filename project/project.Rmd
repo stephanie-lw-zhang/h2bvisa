@@ -2,7 +2,8 @@
 title: "PROJECT TITLE"
 author: "24-7"
 date: "4-20-18"
-output: github_document
+output: html_document
+runtime: shiny
 ---
 
 ```{r setup, include=FALSE}
@@ -301,6 +302,38 @@ server <- function(input, output) {
 # Create Shiny app object
 shinyApp(ui, server)
 ```
+
+```{r shiny-map}
+ui <- fluidPage(
+      titlePanel("H2B visas by state"),
+      sidebarLayout(
+        sidebarPanel(
+          selectInput(inputId = "fill", label = "Fill Map By",
+          choices = c("Proportion approved" = "prop"),
+          selected = "Proportion approved")
+        ),
+       mainPanel(
+         plotOutput(outputId = "map")
+       )
+      )
+      
+  )
+
+server <- function(input, output) {
+  output$map <- renderPlot({
+  ggplot(data = map) + 
+  geom_polygon(aes_string(x = "long", y = "lat", group = "group", fill = input$fill), color = "white") +
+  coord_fixed(1.5) + 
+  labs(
+       x = "Longitude",
+       y = "Latitude"
+       )
+  })
+}
+
+shinyApp(ui = ui, server = server)
+```
+
 
 
 
