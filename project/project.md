@@ -3,40 +3,16 @@ PROJECT TITLE
 24-7
 4-20-18
 
-<<<<<<< HEAD
     ## Warning: running command 'timedatectl' had status 1
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-    ## ── Attaching packages ──────────────────────────────────────────────────────── tidyverse 1.2.1 ──
-=======
-    ## ── Attaching packages ──────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
->>>>>>> 8cb8556dc4f35c4c648af3cf2060a1ac27f4cc21
-=======
-    ## ── Attaching packages ───────────────────────────────────────────── tidyverse 1.2.1 ──
->>>>>>> cba0bf61b8e3968a6b86623f1523926d79c9654b
-=======
-    ## ── Attaching packages ───────────────────────────── tidyverse 1.2.1 ──
->>>>>>> 73800d78550ff57fb1f005ac6be2fc797f917236
+    ## ── Attaching packages ─────────────────────────────────────────────────────── tidyverse 1.2.1 ──
 
     ## ✔ ggplot2 2.2.1     ✔ purrr   0.2.4
-    ## ✔ tibble  1.4.2     ✔ dplyr   0.7.4
-    ## ✔ tidyr   0.8.0     ✔ stringr 1.3.0
-    ## ✔ readr   1.1.1     ✔ forcats 0.3.0
+    ## ✔ tibble  1.4.1     ✔ dplyr   0.7.4
+    ## ✔ tidyr   0.7.2     ✔ stringr 1.2.0
+    ## ✔ readr   1.1.1     ✔ forcats 0.2.0
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-    ## ── Conflicts ─────────────────────────────────────────────────────────── tidyverse_conflicts() ──
-=======
-    ## ── Conflicts ─────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
->>>>>>> 8cb8556dc4f35c4c648af3cf2060a1ac27f4cc21
-=======
-    ## ── Conflicts ──────────────────────────────────────────────── tidyverse_conflicts() ──
->>>>>>> cba0bf61b8e3968a6b86623f1523926d79c9654b
-=======
-    ## ── Conflicts ──────────────────────────────── tidyverse_conflicts() ──
->>>>>>> 73800d78550ff57fb1f005ac6be2fc797f917236
+    ## ── Conflicts ────────────────────────────────────────────────────────── tidyverse_conflicts() ──
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
 
@@ -129,10 +105,3 @@ In 2008, Congress failed to renew the Save Our Small and Seasonal Bussinesses Ac
     ##                                                  6.584e-03  
     ##                                                 regionWest  
     ##                                                 -1.104e-02
-
-### Shiny
-
-<!--html_preserve-->
-Shiny applications not supported in static R Markdown documents
-
-<!--/html_preserve-->
