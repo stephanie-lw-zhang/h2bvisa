@@ -1,12 +1,8 @@
 ---
-title: "PROJECT TITLE"
+title: "Identifying Trends in H2B Visa Certification"
 author: "24-7"
-date: "4-20-18"
-<<<<<<< HEAD
-output: github_document
-=======
+date: "5-4-18"
 output: html_document
->>>>>>> 6b3ca37747a0723df561d971d364fc3df909348b
 runtime: shiny
 ---
 
@@ -218,13 +214,10 @@ h2b <- h2b %>%
     str_sub(certification_begin_date,3,5) == "Dec" ~ "winter",
     str_sub(certification_begin_date,4,6) == "Dec" ~ "winter",
   ))
-
-h2b <- h2b %>%
-  mutate(time = paste(year, submitted_season, sep = " ", collapse = NULL))
 ```
 
 
-```{r - mutate_region}
+```{r-mutate_region}
 h2b <- h2b %>%
   mutate(region = case_when(
     employer_state == "WA" | employer_state == "OR" | employer_state == "CA" |  employer_state == "ID" | employer_state == "MT" | employer_state == "WY" | employer_state == "NV" | employer_state == "UT" | employer_state == "CO" | employer_state == "AZ" | employer_state == "NM" | employer_state == "AK" | employer_state == "HI" ~ "West",
@@ -234,7 +227,7 @@ h2b <- h2b %>%
   ))
 ```
 
-```{r - mutate_job_categories}
+```{r-mutate_job_categories}
 h2b <- h2b %>%
   mutate(occupation_category = case_when(
     str_sub(dot_occupational_code,1,1) == "0" | str_sub(dot_occupational_code,1,1) == "1" ~ "professional, technical, and managerial",
@@ -383,7 +376,7 @@ ui <- fluidPage(
       sidebarLayout(
         sidebarPanel(
           selectInput(inputId = "fill", label = "Fill Map By",
-          choices = c("Wage" = "prop",
+          choices = c("Proportion approved" = "prop",
                       "Total applications" = "n", 
                       "Median hourly wage" = "median_wage",
                       "Most popular occupation" = "occupation_category",
@@ -412,138 +405,37 @@ server <- function(input, output) {
 shinyApp(ui = ui, server = server)
 ```
 
-```{r - scatterplot}
+```{r - bar graphs}
 ui <- fluidPage(
-  titlePanel("H2B Visa Plots"),
+  titlePanel("H2B Visa Data"),
   sidebarLayout(
     sidebarPanel(
-      
-      # Subtitle
-      h4("Plot"),
-      
-      # Select variable for y-axis
-      selectInput(inputId = "y", 
-                  label = "Y-axis:",
-                  choices = c("Wage" = "basic_rate_of_pay", 
-                              "Number of Workers Requested" = "nbur_workers_requested", 
-                              "Number of Workers Certified" = "nbr_workers_certified"),
-                  selected = "basic_rate_of_pay"),
-      
-      # Select variable for x-axis
-      selectInput(inputId = "x", 
-                  label = "X-axis:",
-                  choices = c("Time" = "time", 
-                              "Wage" = "basic_rate_of_pay", 
-                              "Number of Workers Requested" = "nbur_workers_requested", 
-                              "Number of Workers Certified" = "nbr_workers_certified"), 
-                  selected = "time"),
-      
-      # Select variable for color
-      selectInput(inputId = "z", 
-                  label = "Color by:",
-                  choices = c("Job Category" = "occupation_category", 
-                              "Season (submitted)" = "submitted_season", 
-                              "Year" = "year", 
-                              "Region" = "region"),
-                  selected = "occupation_category"),
-      
-      # Set alpha level
-      sliderInput(inputId = "alpha", 
-                  label = "Alpha:", 
-                  min = 0, max = 1, 
-                  value = 0.5),
+      selectInput(inputId = "category", label = "Categories",
+                  choices = c("Case Status" = "case_status",
+                              "Job Category" = "occupation_category", 
+                              "Region" = "region",
+                              "Submitted Season" = "submitted_season",
+                              "Decision Season" = "decision_season",
+                              "Difference in Prevailing and Basic Wage" = "wage_diff"),
+                  selected = "Case Status")
     ),
-    # Output:
     mainPanel(
-      
-      # Show scatterplot
-      plotOutput(outputId = "scatterplot"),
-      br(), br(),    # a little bit of visual separation
+      plotOutput(outputId = "bar_graph")
     )
   )
+
+  
 )
-  
-  # Define server function --------------------------------------------
+
 server <- function(input, output) {
-  
-  # Create a subset of data filtering for selected title types
-  visa_sample <- eventReactive(
-    # when button is clicked
-    input$sample_button, { 
-      
-      # take a sample
-      movies %>% sample_n(input$sample_size) 
-      
-      },
-    ignoreNULL = FALSE
-    )
-  
-  # Write random sample to csv
-  observeEvent(
-    # when button is clicked
-    input$write_csv, {
-      
-      # clean up text for now
-      now <- Sys.time() %>%
-        str_replace_all("\\:", "-") %>%
-        str_replace(" ", "_")
-      # create a filename with movies_sample and timestamp
-      filename <- paste0("movies_sample_", now,".csv")
-      # write csv
-      write_csv(movies_sample(), path = filename)
-      
-      }
-    )
-  
-  # Create scatterplot object the plotOutput function is expecting
-  output$scatterplot <- renderPlot({
-    ggplot(data = visa_sample(), aes_string(x = input$x, y = input$y,
-                                              color = input$z)) +
-      geom_point(alpha = isolate({ input$alpha }) ) +
-      labs(x = toTitleCase(str_replace_all(input$x, "_", " ")),
-           y = toTitleCase(str_replace_all(input$y, "_", " ")),
-           color = toTitleCase(str_replace_all(input$z, "_", " ")))
+  output$bar_graph <- renderPlot({
+    ggplot(data = h2b, mapping = aes_string(x = input$category)) +
+      geom_bar() + theme_minimal() + 
+      labs( x=input$category, y="count")
   })
-  
 }
 
-# Create the Shiny app object ---------------------------------------
-shinyApp(ui, server)
-```
-
-```{r - bar graphs}
-# ui <- fluidPage(
-#   titlePanel("H2B Visa Data"),
-#   sidebarLayout(
-#     sidebarPanel(
-#       selectInput(inputId = "category", label = "Categories",
-#                   choices = c("Case Status" = "case_status",
-#                               "Job Category" = "occupation_category", 
-#                               "Region" = "region",
-#                               "Submitted Season" = "submitted_season",
-#                               "Decision Season" = "decision_season",
-#                               "Difference in Prevailing and Basic Wage" = "wage_diff"),
-#                   selected = "Case Status"),
-# 
-#     
-#     mainPanel(
-#       plotOutput(outputId = "bar_graph")
-#     )
-#   )
-# 
-#   
-# 
-# server <- function(input, output) {
-#   output$bar_graph <- renderPlot({
-#     ggplot(mapping = aes(x = input$category, y = count(input$category)) +
-#       geom_bar(position = "dodge", stat="identity") + theme_minimal() + 
-#       labs( x=input$category, y="count")
-#     
-#       )
-#   })
-# }
-# 
-# shinyApp(ui = ui, server = server)
+shinyApp(ui = ui, server = server)
 ```
 
 
