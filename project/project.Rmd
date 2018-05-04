@@ -1,7 +1,7 @@
 ---
-title: "PROJECT TITLE"
+title: "Identifying Trends in H2B Visa Certification"
 author: "24-7"
-date: "4-20-18"
+date: "5-4-18"
 output: html_document
 runtime: shiny
 ---
@@ -429,17 +429,9 @@ ui <- fluidPage(
 
 server <- function(input, output) {
   output$bar_graph <- renderPlot({
-<<<<<<< HEAD
-    ggplot(mapping = aes(x = input$category, y = count(input$category)) +
-      geom_bar(position = "dodge", stat="identity") + theme_minimal() + 
-      labs(x=input$category, y="count")
-    
-      )
-=======
     ggplot(data = h2b, mapping = aes_string(x = input$category)) +
       geom_bar() + theme_minimal() + 
       labs( x=input$category, y="count")
->>>>>>> 4dab9a26a1bfe3c231a4df28edf306d59a0af1f1
   })
 }
 
