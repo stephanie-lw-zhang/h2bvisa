@@ -1,3 +1,4 @@
 # presentation
 
-Place PDF of presentation here. If using Google Slides add a link to the slides to the README. If not, delete this README once PDF is placed in this folder. 
+Link to presentation: 
+https://docs.google.com/presentation/d/1mti-Q2zLB1Fc94Dncqm7ru1oWwdZ2LuMYUDonu73Gmk/edit?usp=sharing
