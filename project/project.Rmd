@@ -411,8 +411,14 @@ ui <- fluidPage(
                               "Region" = "region",
                               "Submitted Season" = "submitted_season",
                               "Decision Season" = "decision_season",
+                              "Start Season" = "start_season", 
                               "Difference in Prevailing and Basic Wage" = "wage_diff"),
-                  selected = "Case Status")
+                  selected = "Case Status"),
+      selectInput(inputId = "fill", label = "Fill By",
+                  choices = c("Region" = "region",
+                              "Start Season" = "start_season",
+                              "Case Status" = "case_status"),
+                  selected = "Year")
     ),
     mainPanel(
       plotOutput(outputId = "bar_graph")
@@ -424,7 +430,7 @@ ui <- fluidPage(
 
 server <- function(input, output) {
   output$bar_graph <- renderPlot({
-    ggplot(data = h2b, mapping = aes_string(x = input$category)) +
+    ggplot(data = h2b %>% filter(case_status != "WITHDRAWN" & case_status != "FINAL REVIEW"), mapping = aes_string(x = input$category, fill = input$fill)) +
       geom_bar() + theme_minimal() + 
       labs(x=input$category, y="Count") + 
       coord_flip()
