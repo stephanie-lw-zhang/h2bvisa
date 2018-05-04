@@ -421,14 +421,13 @@ ui <- fluidPage(
                               "Region" = "region",
                               "Submitted Season" = "submitted_season",
                               "Decision Season" = "decision_season",
-                              "Start Season" = "start_season", 
-                              "Difference in Prevailing and Basic Wage" = "wage_diff"),
+                              "Start Season" = "start_season"),
                   selected = "Case Status"),
       selectInput(inputId = "fill", label = "Fill By",
                   choices = c("Region" = "region",
                               "Start Season" = "start_season",
                               "Case Status" = "case_status"),
-                  selected = "Year")
+                  selected = "Region")
     ),
     mainPanel(
       plotOutput(outputId = "bar_graph")
@@ -449,6 +448,19 @@ server <- function(input, output) {
 
 shinyApp(ui = ui, server = server)
 ```
+
+```{r - summary_statistics_bar_graphs}
+
+h2b %>%
+   count(case_status)
+
+```
+
+
+When looking at our bar graphs, we see that most cases are certified. 20,558 cases were approved and 6,657 were partially approved, while only 4204 were denied. 
+We are also able to look more into seasonal trends. The most workers submit and receive visa decisions in the winter, and most workers then begin work in the spring and the winter. This makes sense given the workers would start work soon after their visa is approved.
+
+Another interesting observation is that most workers appear to be working in the South. When looking at most frequent job category, we see that most workers are working in the agricultural sector. Since the South produces a large portion of the country's agricultural goods, this makes sense that they would need to bring in seasonal workers to help with harvesting or planting food at different times. 
 
 ###Conclusions
 
