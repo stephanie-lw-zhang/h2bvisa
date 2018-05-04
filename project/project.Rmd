@@ -47,6 +47,13 @@ h2b <- h2b %>%
 ```
 
 ### Introduction
+Background and Purpose
+An H2-B visa is a temporary work visa for foreign workers with a job offer for seasonal, non-agricultural work in the United States. Employers from the United States must first submit temporary labor certification applications to the Department of Labor to allow H-2B workers to apply for visas. (Source: U.S. Citizenship and Immigration Services) The H2-B visa is especially important for industries with seasonal variations, such as landscaping and hospitality (http://thehill.com/blogs/congress-blog/labor/269298-the-nation-needs-the-h2b-program). Small businesses rely on these temporary workers to keep their business running during peak times. However, not all applications for this visa are approved. Currently, H2-B visas are capped at 66,000 per fiscal year. (https://www.uscis.gov/working-united-states/temporary-workers/h-2b-temporary-non-agricultural-workers). Through analyzing data provided by the Department of Labor's Office of Foreign Labor Certification, this project aims to find out what factors make applicants more likely to get successfully obtain H2-B visas. Specifically, this project looks at how job category, wage, season, region, and number of workers affects the likelihood of getting an H2-B visa application approved.
+
+Outline
+In this project, we produced visualizations to present the data in an accessible, digestible format. We created a visualization for each of the factors we are considering. Furthermore, we created a regression model to further analyze how the variables affect the likelihood of a case being approved. Finally, we created a shiny app so users can see the relationships between various factors. 
+
+
 
 ```{r - uncapitalize_variables}
 h2b <- h2b %>%
@@ -311,6 +318,9 @@ selected_mod <- step(mod, direction = "backward")
 
 (selected_mod)
 ```
+
+Using backwards selection, we discovered that the number of workers requested was not a significant factor that determined the proportion of workers certified. Since case status is a categorical variable, the model predicts the proportion of workers certified for each visa. In terms of which industries are most likely to get the H2-B visa approved, the model indicates that agricultural, fishery, forestry, and related (which counts as one occupational category) and processing approve the largest proportion of cases. On the other hand, visas for workers in professional, technical, and managerial work (which counts as one occupational category) are least likely to be approved. Relative to processing, a visa for a worker in a professional, technical, or managerial position is 21.69 percent less likely to be approved. Additionally, visas submitted in the winter have the highest chance of certification, followed by fall, summer, and then spring.  Winter has a 10.37 higher percent chance of approval than spring. As for regional differences, visas submitted in the Northeast are mostly likely to be approved, followed by the South, the Midwest, and finally the West. Visas submitted in the Northeast is 5.18 percent more likely to be approved than the west. 
+
 
 
 ```{r map-wage}
