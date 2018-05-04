@@ -3,6 +3,7 @@ title: "PROJECT TITLE"
 author: "24-7"
 date: "4-20-18"
 output: github_document
+runtime: shiny
 ---
 
 ```{r setup, include=FALSE}
@@ -275,7 +276,7 @@ selected_mod <- step(mod, direction = "backward")
 ```
 
 ###Shiny
-```{r}
+```{r shiny-app, echo = FALSE}
 ui <- fluidPage(
   titlePanel("Multiply by 3"),
   sidebarLayout(
