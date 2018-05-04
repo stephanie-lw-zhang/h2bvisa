@@ -46,9 +46,8 @@ h2b <- h2b %>%
   select(year, CASE_NO, DECISION_DATE, NPC_SUBMITTED_DATE, CASE_STATUS, ALIEN_WORK_STATE, CERTIFICATION_BEGIN_DATE, CERTIFICATION_END_DATE, EMPLOYER_CITY, EMPLOYER_STATE, EMPLOYER_POSTAL_CODE, AGENT_ATTORNEY_CITY, AGENT_ATTORNEY_STATE, JOB_TITLE, NBR_WORKERS_CERTIFIED, PREVAILING_WAGE, PW_UNIT_OF_PAY, BASIC_RATE_OF_PAY, BASIC_UNIT_OF_PAY, DOT_OCCUPATIONAL_CODE, NBR_WORKERS_REQUESTED, DOT_NAME, SOC_CODE, SOC_NAME)
 ```
 
-### Background
+### Introduction
 
-### Data Manipulation
 ```{r - uncapitalize_variables}
 h2b <- h2b %>%
   mutate(case_no = CASE_NO, 
@@ -243,7 +242,6 @@ h2b <- h2b %>%
 
 ```
 
-### Visualizations
 ```{r - map}
 state_props <- h2b %>%
   filter(!is.na(nbur_workers_requested) & !(is.na(nbr_workers_certified))) %>%
@@ -301,7 +299,6 @@ h2b %>%
 
 In 2008, Congress failed to renew the Save Our Small and Seasonal Bussinesses Act (SOSSBA). This reduced the cap for the total number of H2B Visas that could be approved every year. 
 
-### Regression Model
 ```{r-mutate-prop-certified}
 h2b <- h2b %>%
   mutate(prop_workers_certified = nbr_workers_certified/nbur_workers_requested) 
@@ -315,8 +312,6 @@ selected_mod <- step(mod, direction = "backward")
 (selected_mod)
 ```
 
-
-###Shiny
 
 ```{r map-wage}
 state_wages <- h2b %>%
@@ -438,5 +433,5 @@ server <- function(input, output) {
 shinyApp(ui = ui, server = server)
 ```
 
-
+###Conclusions
 
