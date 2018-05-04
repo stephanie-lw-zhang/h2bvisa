@@ -431,7 +431,7 @@ server <- function(input, output) {
   output$bar_graph <- renderPlot({
     ggplot(mapping = aes(x = input$category, y = count(input$category)) +
       geom_bar(position = "dodge", stat="identity") + theme_minimal() + 
-      labs( x=input$category, y="count")
+      labs(x=input$category, y="count")
     
       )
   })
@@ -439,5 +439,6 @@ server <- function(input, output) {
 
 shinyApp(ui = ui, server = server)
 ```
+
 
 
