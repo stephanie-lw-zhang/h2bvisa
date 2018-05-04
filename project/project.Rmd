@@ -48,7 +48,6 @@ h2b <- h2b %>%
 
 ### Background
 
-### Data Manipulation
 ```{r - uncapitalize_variables}
 h2b <- h2b %>%
   mutate(case_no = CASE_NO, 
@@ -431,7 +430,8 @@ server <- function(input, output) {
   output$bar_graph <- renderPlot({
     ggplot(data = h2b, mapping = aes_string(x = input$category)) +
       geom_bar() + theme_minimal() + 
-      labs( x=input$category, y="count")
+      labs(x=input$category, y="Count") + 
+      coord_flip()
   })
 }
 
