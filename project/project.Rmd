@@ -10,7 +10,7 @@ runtime: shiny
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-```{r - install_packages, include=FALSE}
+```{r install-packages, include=FALSE}
 library(tidyverse)
 library(readxl)
 library(stringr)
@@ -19,12 +19,12 @@ library(Metrics)
 library(shiny)
 ```
 
-```{r-seed}
+```{r seed}
 set.seed(1234)
 ```
 
 
-```{r join-data, echo = FALSE, message=FALSE}
+```{r join-data, message=FALSE}
 h2b2008 <- read_csv("data/H-2B_FY2008.csv") %>%
   mutate(year = 2008)
 h2b2009 <- read_csv("data/H-2B_FY2009.csv") %>%
@@ -53,7 +53,7 @@ In this project, we produced visualizations to present the data in an accessible
 
 
 
-```{r - uncapitalize_variables}
+```{r uncapitalize-variables}
 h2b <- h2b %>%
   mutate(case_no = CASE_NO, 
          decision_date = DECISION_DATE,
@@ -85,7 +85,7 @@ h2b <- h2b %>%
 ```
 
 
-```{r - muate_benefits}
+```{r muate-benefits}
 
 h2b <- h2b %>%
   mutate(wage_diff = case_when(
@@ -98,7 +98,7 @@ h2b <- h2b %>%
 ```
 
 
-```{r - mutate_season}
+```{r mutate-season}
 h2b <- h2b %>%
   mutate(decision_season = case_when(
     str_sub(decision_date,1,2) == "1/" ~ "winter",
@@ -221,7 +221,7 @@ h2b <- h2b %>%
 ```
 
 
-```{r-mutate_region}
+```{r mutate-region}
 h2b <- h2b %>%
   mutate(region = case_when(
     employer_state == "WA" | employer_state == "OR" | employer_state == "CA" |  employer_state == "ID" | employer_state == "MT" | employer_state == "WY" | employer_state == "NV" | employer_state == "UT" | employer_state == "CO" | employer_state == "AZ" | employer_state == "NM" | employer_state == "AK" | employer_state == "HI" ~ "West",
@@ -231,7 +231,7 @@ h2b <- h2b %>%
   ))
 ```
 
-```{r-mutate_job_categories}
+```{r mutate-job-categories}
 h2b <- h2b %>%
   mutate(occupation_category = case_when(
     str_sub(dot_occupational_code,1,1) == "0" | str_sub(dot_occupational_code,1,1) == "1" ~ "professional, technical, and managerial",
@@ -247,7 +247,7 @@ h2b <- h2b %>%
 
 ```
 
-```{r - map}
+```{r map}
 state_props <- h2b %>%
   filter(!is.na(nbur_workers_requested) & !(is.na(nbr_workers_certified))) %>%
   filter(employer_state %in% state.abb | employer_state == "DC") %>%
@@ -278,7 +278,7 @@ h2b %>%
 
 In 2008, Congress failed to renew the Save Our Small and Seasonal Bussinesses Act (SOSSBA). This reduced the cap for the total number of H2B Visas that could be approved every year. 
 
-```{r - box plot}
+```{r box-plot}
 h2b %>% 
   filter(case_status %in% c("CERTIFIED", "PARTIAL CERTIFIED", "DENIED")) %>%
   filter(!is.na(basic_rate_of_pay) & !(is.na(basic_unit_of_pay)), basic_unit_of_pay == "HR", basic_rate_of_pay < 100) %>%
@@ -292,12 +292,12 @@ h2b %>%
 
 We filtered out all hourly wages above 100 because we felt these were unreasonable and greatly skewed the plot.
 
-```{r-mutate-prop-certified}
+```{r mutate-prop-certified}
 h2b <- h2b %>%
   mutate(prop_workers_certified = nbr_workers_certified/nbur_workers_requested) 
 ```
 
-```{r-backwards-selection}
+```{r backwards-selection}
 mod <- lm(prop_workers_certified ~ occupation_category + prevailing_wage + submitted_season + region + nbur_workers_requested, data = h2b)
 
 selected_mod <- step(mod, direction = "backward")
@@ -363,7 +363,6 @@ state_total <- h2b %>%
 map <- merge(state_total, map, sort = FALSE, by = "region")
 ```
 
-
 ```{r shiny-map}
 ui <- fluidPage(
       titlePanel("H2B visas by state"),
@@ -381,7 +380,6 @@ ui <- fluidPage(
          plotOutput(outputId = "map")
        )
       )
-      
   )
 
 server <- function(input, output) {
@@ -430,7 +428,6 @@ state_total %>%
   arrange(n)
 ```
 
-
 The Federal Office of Management and Budget splits the US into 10 regions, which are more specific than the 4 general regions we used in other parts of the project. In terms of occupation type, 2 of these regions, Region 8 (Colorado, Montana, North Dakota, South Dakota, Utah, Wyoming) and Region 1 (Connecticut, Maine, Massachusetts, New Hampshire, Rhode Island, Vermont) are significant. Every state in these regions, other than Colorado and Connecticut, has "Service" as it's most popular occupation type. There are only 4 other states in the US with this characteristic, and they are scattered through other regions. Generally, the states in this region are somewhat rural and remote, and have low population densities, which may play a role in the occupation type sought by employers for these visas. 
 
 The other 2 states with popular application types other than agriculture are Washington and Iowa. Washington is one of the US's largest producers of lumber, which may help explain why processing is the most popular job type in that state, although Oregon, the US's largest lumber state, does not share this characteristic. Iowa's most popular occupation is Structural Work, which focuses on construction, fabrication, and welding. 
@@ -456,7 +453,7 @@ state_wages %>%
 
 Overall the map shows interesting statistics about H2B visas by state. Agricultural work is the most popular in the vast majority of states. Most states also pay very low wages to these workers. Finally, workers in the majority of states start in the Spring. 
 
-```{r - bar graphs}
+```{r bar-graphs}
 ui <- fluidPage(
   titlePanel("H2B Visa Data"),
   sidebarLayout(
@@ -479,8 +476,6 @@ ui <- fluidPage(
       plotOutput(outputId = "bar_graph")
     )
   )
-
-  
 )
 
 server <- function(input, output) {
@@ -495,8 +490,7 @@ server <- function(input, output) {
 shinyApp(ui = ui, server = server)
 ```
 
-```{r - summary_statistics_bar_graphs}
-
+```{r summary-statistics-bar-graphs}
 h2b %>%
    count(case_status)
 
