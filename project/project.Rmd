@@ -257,35 +257,8 @@ state_props <- h2b %>%
   group_by(region) %>%
   summarise(prop = sum(nbr_workers_certified) / sum(nbur_workers_requested))
 
-#h2b %>%
-  #filter(!is.na(nbur_workers_requested) & !(is.na(nbr_workers_certified))) %>%
-  #group_by(employer_state) %>%
-  #summarise(prop = sum(nbr_workers_certified) / sum(nbur_workers_requested),
-   #         n = n()) %>%
-  #arrange(desc(prop))
-
-#h2b %>%
- # filter(!is.na(nbur_workers_requested) & !(is.na(nbr_workers_certified))) %>%
-  #group_by(employer_state) %>%
-  #summarise(prop = sum(nbr_workers_certified) / sum(nbur_workers_requested),
-   #         n = n()) %>%
-  #arrange(prop)
-
 map <- merge(state_props, map_data("state"), sort = FALSE, by = "region")
 
-map %>%
-  ggplot() + 
-  geom_polygon(aes(x = long, y = lat, group = group, fill = prop), color = "white") +
-  coord_fixed(1.5) + 
-  labs(title = "Proportion of H2B visa applications approved",
-       subtitle = "By state",
-       x = "Longitude",
-       y = "Latitude",
-       fill = "Proportion approved")
-  
-#map_data("state") %>%
- # ggplot() +
-  #geom_polygon(aes(x = long, y = lat, group = group), color = "white")
 ```
 
 ```{r line-graph}
@@ -318,9 +291,9 @@ selected_mod <- step(mod, direction = "backward")
 (selected_mod)
 ```
 
-Using backwards selection, we discovered that the number of workers requested was not a significant factor that determined the proportion of workers certified. Since case status is a categorical variable, the model predicts the proportion of workers certified for each visa. In terms of which industries are most likely to get the H2-B visa approved, the model indicates that agricultural, fishery, forestry, and related (which counts as one occupational category) and processing approve the largest proportion of cases. On the other hand, visas for workers in professional, technical, and managerial work (which counts as one occupational category) are least likely to be approved. Relative to processing, a visa for a worker in a professional, technical, or managerial position is 21.69 percent less likely to be approved. This makes sense because processing and agricultural jobs are not very desirable to American workers, so there is a labor shortage in these sectors. Furthermore, professional jobs are more sought after by Americans, and they are positions that don’t lend themselves as well to temporary work. 
+Using backwards selection, we discovered that the number of workers requested was not a significant factor that determined the proportion of workers certified. Since case status is a categorical variable, the model predicts the proportion of workers certified for each visa application (a numerical variable) instead. In terms of which industries are most likely to get the H2-B visa approved, the model indicates that agricultural, fishery, forestry, and related (which counts as one occupational category) and processing approve the largest proportion of cases. On the other hand, visas for workers in professional, technical, and managerial work (which counts as one occupational category) are least likely to be approved. Relative to processing, a visa for a worker in a professional, technical, or managerial position is 21.69 percent less likely to be approved. This makes sense because processing and agricultural jobs are not desirable to American workers, so there is a labor shortage in these sectors. Furthermore, professional jobs are more sought after by Americans, and they are positions that don’t lend themselves as well to temporary work. Therefore, these jobs are not likely to be approved for a H2-B temporary visa.
 
-Additionally, visas submitted in the winter have the highest chance of certification, followed by fall, summer, and then spring.  Winter has a 10.37 higher percent chance of approval than spring. As for regional differences, visas submitted in the Northeast are mostly likely to be approved, followed by the South, the Midwest, and finally the West. Visas submitted in the Northeast is 5.18 percent more likely to be approved than the west. 
+Additionally, visas submitted in the winter have the highest chance of certification, followed by fall, summer, and then spring.  Winter has a 10.37 higher percent chance of approval than spring. As for regional differences, visas submitted in the Northeast are mostly likely to be approved, followed by the South, the Midwest, and finally the West. Visas submitted in the Northeast is 5.18 percent more likely to be approved than the West. 
 
 
 ```{r map-wage}
@@ -412,7 +385,7 @@ shinyApp(ui = ui, server = server)
 
 The following show summary statistics for the percentage of visas approved by state, and a summary of the states with the higest and lowest approval rates. 
 
-It's difficult to see a pattern the state approval rates. Both the maps and the summary show that there are states in both the highest and lowest from each region in the US. One interesting observation is that of the 8 states in which most workers start in the Fall, 5 are among the lost approval rates. 
+It's difficult to see a pattern of the state approval rates. Both the maps and the summary show that there are states in both the highest and lowest from each region in the US. One interesting observation is that of the 8 states in which most workers start in the Fall, 5 are among the lost approval rates. 
 ```{r state-proportions}
 state_props %>%
   summarise(min = min(prop), 
@@ -445,7 +418,7 @@ The Federal Office of Management and Budget splits the US into 10 regions. In te
 
 The other 2 states with popular application types other than agriculture are Washington and Iowa. Washington is one of the US's largest producers of lumber, which may help explain why processing is the most popular job type in that state, although Oregon, the US's largest lumber state, does not share this characteristic. Iowa's most popular occupation is Structural Work, which focuses on construction, fabrication, and welding. 
 
-The following tables show summary statistics for the average hourly wage in each state, and the state's with the highest and lowest wages. In general, region appears to play a large role in wage. States on the coast tend to pay higher wages, and interior states pay lower ones. This seems to match with coast of living in coastal vs. non coastal states. Regardless, the wages payed to H2B visa workers are generally very low. The median H2B visa worker with a household size of 3 will be near or below the poverty line in 75% of states. Washington pays a significantly high median wage, which may be due to the popular occupation type, processing, in that state. 
+The following tables show summary statistics for the average hourly wage in each state, and the states with the highest and lowest wages. In general, region appears to play a large role in wage. States on the coast tend to pay higher wages, and interior states pay lower ones. This seems to match with coast of living in coastal vs. non coastal states. Regardless, the wages payed to H2B visa workers are generally very low. The median H2B visa worker with a household size of 3 will be near or below the poverty line in 75% of states. Washington pays a significantly high median wage, which may be due to the popular occupation type, processing, in that state. 
 
 ```{r state-wages}
 state_wages %>%
@@ -464,7 +437,7 @@ state_wages %>%
   arrange(median_wage)
 ```
 
-Overall the map shows interesting statisticcs about H2B visas by state. Agricultural work is the most popular in the vast majority of states. Most states also pay very low wages to these workers. Finally, workers in the majority of states start in the Spring. 
+Overall the map shows interesting statistics about H2B visas by state. Agricultural work is the most popular in the vast majority of states. Most states also pay very low wages to these workers. Finally, workers in the majority of states start in the Spring. 
 
 ```{r - bar graphs}
 ui <- fluidPage(
@@ -523,7 +496,7 @@ Another interesting observation is that most workers appear to be working in the
 If we had more time, we would also include logistic regression to analyze the likelihood of an individual application being approved. This would allow us to set the dependent variable as a categorical one. We would also look at policies that relate to H2-B visas to find if there are any institutional reasons one visa application is more likely to be approved. 
 
 
-In terms of our dataset, there could be several things pertaining to pertaining to the reliability and validity of our conclusions. As is the case in most large datasets, we had some NA values that we had to deal with. Since we combined data from several years, different years would sometimes have different columns, so we would get a lot of NA's as a result. We made do with what we had, but missing years of data could mean that changes from year to year were not represented as well. Another hurdle that we had to overcome with our data was the different wage units. Wages were mostly reported as hourly wages, but in some cases they were reported as monthly or yearly wages instead. Since there was no column reporting how many hours each worker worked, there was no way for us to standardize this data. Alas, when examining differences in wages, we chose to mainly foucs on the hourly data since that is what we had the most of to work with. Lastly we had some trouble working with the dates because they were not written in the same format each year. For example, some dates were written as 1/27/08 and others were written as 1-Jan-08. We eventually found a way to make things work, but it took us a while to get things correct. 
+In terms of our dataset, there could be several things pertaining to the reliability and validity of our conclusions. As is the case in most large datasets, we had some NA values that we had to deal with. Since we combined data from several years, different years would sometimes have different columns, so we would get a lot of NA's as a result. We made do with what we had, but missing years of data could mean that changes from year to year were not represented as well. Another hurdle that we had to overcome with our data was the different wage units. Wages were mostly reported as hourly wages, but in some cases they were reported as monthly or yearly wages instead. Since there was no column reporting how many hours each worker worked, there was no way for us to standardize this data. Alas, when examining differences in wages, we chose to mainly foucs on the hourly data since that is what we had the most of to work with. Lastly we had some trouble working with the dates because they were not written in the same format each year. For example, some dates were written as 1/27/08 and others were written as 1-Jan-08. We eventually found a way to make things work, but it took us a while to get things correct. 
 
 
 
