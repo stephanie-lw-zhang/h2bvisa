@@ -259,6 +259,7 @@ state_props <- h2b %>%
 
 map <- merge(state_props, map_data("state"), sort = FALSE, by = "region")
 
+
 ```
 
 ```{r line-graph}
