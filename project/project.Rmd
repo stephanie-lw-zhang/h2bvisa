@@ -19,11 +19,6 @@ library(Metrics)
 library(shiny)
 ```
 
-```{r seed}
-set.seed(1234)
-```
-
-
 ```{r join-data, message=FALSE}
 h2b2008 <- read_csv("data/H-2B_FY2008.csv") %>%
   mutate(year = 2008)
