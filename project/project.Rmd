@@ -412,7 +412,7 @@ shinyApp(ui = ui, server = server)
 
 The following show summary statistics for the percentage of visas approved by state, and a summary of the states with the higest and lowest approval rates. 
 
-It's difficult to see a pattern the state approval rates. Both the maps and the summary show that there are states in both the highest and lowest from each region in the US. One interesting observation is that of the 8 states in which most workers start in the Fall, 5 are among the lost approval rates. 
+It's difficult to see a pattern the state approval rates. Both the maps and the summary show that there are states in both the highest and lowest from each region in the US. One interesting observation is that of the 8 states in which most workers start in the Fall, 5 are among the lowest approval rates. However, we were unable to find a reason that fall applications do so poorly. 
 ```{r state-proportions}
 state_props %>%
   summarise(min = min(prop), 
@@ -441,7 +441,7 @@ state_total %>%
 ```
 
 
-The Federal Office of Management and Budget splits the US into 10 regions. In terms of occupation type, 2 of these regions, Region 8 (Colorado, Montana, North Dakota, South Dakota, Utah, Wyoming) and Region 1 (Connecticut, Maine, Massachusetts, New Hampshire, Rhode Island, Vermont). Every state in these regions, other than Colorado and Connecticut has "Service" as it's most popular occupation type. There are only 4 other states in the US with this characteristic, and they are scattered through other regions. Generally, the states in this region are somewhat rural and remote, and have low population densities, which may play a role in the occupation type sought by employers for these visas. 
+The Federal Office of Management and Budget splits the US into 10 regions, which are more specific than the 4 general regions we used in other parts of the project. In terms of occupation type, 2 of these regions, Region 8 (Colorado, Montana, North Dakota, South Dakota, Utah, Wyoming) and Region 1 (Connecticut, Maine, Massachusetts, New Hampshire, Rhode Island, Vermont) are significant. Every state in these regions, other than Colorado and Connecticut, has "Service" as it's most popular occupation type. There are only 4 other states in the US with this characteristic, and they are scattered through other regions. Generally, the states in this region are somewhat rural and remote, and have low population densities, which may play a role in the occupation type sought by employers for these visas. 
 
 The other 2 states with popular application types other than agriculture are Washington and Iowa. Washington is one of the US's largest producers of lumber, which may help explain why processing is the most popular job type in that state, although Oregon, the US's largest lumber state, does not share this characteristic. Iowa's most popular occupation is Structural Work, which focuses on construction, fabrication, and welding. 
 
