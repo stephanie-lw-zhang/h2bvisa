@@ -409,6 +409,9 @@ server <- function(input, output) {
 shinyApp(ui = ui, server = server)
 ```
 
+The following show summary statistics for the percentage of visas approved by state, and a summary of the states with the higest and lowest approval rates. 
+
+It's difficult to see a pattern the state approval rates. Both the maps and the summary show that there are states in both the highest and lowest from each region in the US. One interesting observation is that of the 8 states in which most workers start in the Fall, 5 are among the lost approval rates. 
 ```{r state-proportions}
 state_props %>%
   summarise(min = min(prop), 
@@ -418,8 +421,49 @@ state_props %>%
             max = max(prop),
             mean = mean(prop),
             sd = sd(prop))
+
+state_props %>%
+  arrange(desc(prop))
+
+state_props %>%
+  arrange(prop)
 ```
 
+The following tables show the states with the most and fewest applications. There is overlap between the states with the most applications and those with the highest approval rates, and those with the fewest applications and lowest approval rates. This suggests that the number of applications may play a role in the percentage that are approved. 
+
+```{r total-apps}
+state_total %>%
+  arrange(desc(n))
+
+state_total %>%
+  arrange(n)
+```
+
+
+The Federal Office of Management and Budget splits the US into 10 regions. In terms of occupation type, 2 of these regions, Region 8 (Colorado, Montana, North Dakota, South Dakota, Utah, Wyoming) and Region 1 (Connecticut, Maine, Massachusetts, New Hampshire, Rhode Island, Vermont). Every state in these regions, other than Colorado and Connecticut has "Service" as it's most popular occupation type. There are only 4 other states in the US with this characteristic, and they are scattered through other regions. Generally, the states in this region are somewhat rural and remote, and have low population densities, which may play a role in the occupation type sought by employers for these visas. 
+
+The other 2 states with popular application types other than agriculture are Washington and Iowa. Washington is one of the US's largest producers of lumber, which may help explain why processing is the most popular job type in that state, although Oregon, the US's largest lumber state, does not share this characteristic. Iowa's most popular occupation is Structural Work, which focuses on construction, fabrication, and welding. 
+
+The following tables show summary statistics for the average hourly wage in each state, and the state's with the highest and lowest wages. In general, region appears to play a large role in wage. States on the coast tend to pay higher wages, and interior states pay lower ones. This seems to match with coast of living in coastal vs. non coastal states. Regardless, the wages payed to H2B visa workers are generally very low. The median H2B visa worker with a household size of 3 will be near or below the poverty line in 75% of states. Washington pays a significantly high median wage, which may be due to the popular occupation type, processing, in that state. 
+
+```{r state-wages}
+state_wages %>%
+  summarise(min = min(median_wage), 
+            q1 = quantile(median_wage, c(0.25)),
+            median = median(median_wage),
+            q3 = quantile(median_wage, c(0.75)),
+            max = max(median_wage),
+            mean = mean(median_wage),
+            sd = sd(median_wage))
+
+state_wages %>%
+  arrange(desc(median_wage))
+
+state_wages %>%
+  arrange(median_wage)
+```
+
+Overall the map shows interesting statisticcs about H2B visas by state. Agricultural work is the most popular in the vast majority of states. Most states also pay very low wages to these workers. Finally, workers in the majority of states start in the Spring. 
 
 ```{r - bar graphs}
 ui <- fluidPage(
