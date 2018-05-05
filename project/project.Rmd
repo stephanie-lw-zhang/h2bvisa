@@ -10,7 +10,7 @@ runtime: shiny
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-```{r - install_packages, include=FALSE}
+```{r install-packages, include=FALSE}
 library(tidyverse)
 library(readxl)
 library(stringr)
@@ -19,12 +19,12 @@ library(Metrics)
 library(shiny)
 ```
 
-```{r-seed}
+```{r seed}
 set.seed(1234)
 ```
 
 
-```{r join-data, echo = FALSE, message=FALSE}
+```{r join-data, message=FALSE}
 h2b2008 <- read_csv("data/H-2B_FY2008.csv") %>%
   mutate(year = 2008)
 h2b2009 <- read_csv("data/H-2B_FY2009.csv") %>%
@@ -53,7 +53,7 @@ In this project, we produced visualizations to present the data in an accessible
 
 
 
-```{r - uncapitalize_variables}
+```{r uncapitalize-variables}
 h2b <- h2b %>%
   mutate(case_no = CASE_NO, 
          decision_date = DECISION_DATE,
@@ -85,7 +85,7 @@ h2b <- h2b %>%
 ```
 
 
-```{r - muate_benefits}
+```{r muate-benefits}
 
 h2b <- h2b %>%
   mutate(wage_diff = case_when(
@@ -98,7 +98,7 @@ h2b <- h2b %>%
 ```
 
 
-```{r - mutate_season}
+```{r mutate-season}
 h2b <- h2b %>%
   mutate(decision_season = case_when(
     str_sub(decision_date,1,2) == "1/" ~ "winter",
@@ -221,7 +221,7 @@ h2b <- h2b %>%
 ```
 
 
-```{r-mutate_region}
+```{r mutate-region}
 h2b <- h2b %>%
   mutate(region = case_when(
     employer_state == "WA" | employer_state == "OR" | employer_state == "CA" |  employer_state == "ID" | employer_state == "MT" | employer_state == "WY" | employer_state == "NV" | employer_state == "UT" | employer_state == "CO" | employer_state == "AZ" | employer_state == "NM" | employer_state == "AK" | employer_state == "HI" ~ "West",
@@ -231,7 +231,7 @@ h2b <- h2b %>%
   ))
 ```
 
-```{r-mutate_job_categories}
+```{r mutate-job-categories}
 h2b <- h2b %>%
   mutate(occupation_category = case_when(
     str_sub(dot_occupational_code,1,1) == "0" | str_sub(dot_occupational_code,1,1) == "1" ~ "professional, technical, and managerial",
@@ -247,7 +247,7 @@ h2b <- h2b %>%
 
 ```
 
-```{r - map}
+```{r map}
 state_props <- h2b %>%
   filter(!is.na(nbur_workers_requested) & !(is.na(nbr_workers_certified))) %>%
   filter(employer_state %in% state.abb | employer_state == "DC") %>%
@@ -278,7 +278,7 @@ h2b %>%
 
 In 2008, Congress failed to renew the Save Our Small and Seasonal Bussinesses Act (SOSSBA). This reduced the cap for the total number of H2B Visas that could be approved every year. 
 
-```{r - box plot}
+```{r box-plot}
 h2b %>% 
   filter(case_status %in% c("CERTIFIED", "PARTIAL CERTIFIED", "DENIED")) %>%
   filter(!is.na(basic_rate_of_pay) & !(is.na(basic_unit_of_pay)), basic_unit_of_pay == "HR", basic_rate_of_pay < 100) %>%
@@ -292,12 +292,12 @@ h2b %>%
 
 We filtered out all hourly wages above 100 because we felt these were unreasonable and greatly skewed the plot. Those whose cases were certified has both the highest range and highest median wage, while those partially certified had the lowest spread and average median wage.
 
-```{r-mutate-prop-certified}
+```{r mutate-prop-certified}
 h2b <- h2b %>%
   mutate(prop_workers_certified = nbr_workers_certified/nbur_workers_requested) 
 ```
 
-```{r-backwards-selection}
+```{r backwards-selection}
 mod <- lm(prop_workers_certified ~ occupation_category + prevailing_wage + submitted_season + region + nbur_workers_requested, data = h2b)
 
 selected_mod <- step(mod, direction = "backward")
@@ -307,7 +307,9 @@ selected_mod <- step(mod, direction = "backward")
 
 Using backwards selection, we discovered that the number of workers requested was not a significant factor that determined the proportion of workers certified. Since case status is a categorical variable, the model predicts the proportion of workers certified for each visa application (a numerical variable) instead. In terms of which industries are most likely to get the H2-B visa approved, the model indicates that agricultural, fishery, forestry, and related (which counts as one occupational category) and processing approve the largest proportion of cases. On the other hand, visas for workers in professional, technical, and managerial work (which counts as one occupational category) are least likely to be approved. Relative to processing, a visa for a worker in a professional, technical, or managerial position is 21.69 percent less likely to be approved. This makes sense because processing and agricultural jobs are not desirable to American workers, so there is a labor shortage in these sectors. Furthermore, professional jobs are more sought after by Americans, and they are positions that don’t lend themselves as well to temporary work. Therefore, these jobs are not likely to be approved for a H2-B temporary visa.
 
-Additionally, visas submitted in the winter have the highest chance of certification, followed by fall, summer, and then spring.  Winter has a 10.37 higher percent chance of approval than spring. As for regional differences, visas submitted in the Northeast are mostly likely to be approved, followed by the South, the Midwest, and finally the West. Visas submitted in the Northeast is 5.18 percent more likely to be approved than the West. 
+Additionally, visas submitted in the winter have the highest chance of certification, followed by fall, summer, and then spring.  Winter has a 10.37 higher percent chance of approval than spring. A reason for winter having the highest chance of approval could be because there is a high demand for labor during the spring, which is shown in the data, thus these applications for work in the spring are submitted during the winter.
+
+As for regional differences, visas submitted in the Northeast are mostly likely to be approved, followed by the South, the Midwest, and finally the West. Visas submitted in the Northeast is 5.18 percent more likely to be approved than the West.
 
 
 ```{r map-wage}
@@ -361,7 +363,6 @@ state_total <- h2b %>%
 map <- merge(state_total, map, sort = FALSE, by = "region")
 ```
 
-
 ```{r shiny-map}
 ui <- fluidPage(
       titlePanel("H2B visas by state"),
@@ -379,7 +380,6 @@ ui <- fluidPage(
          plotOutput(outputId = "map")
        )
       )
-      
   )
 
 server <- function(input, output) {
@@ -398,8 +398,6 @@ shinyApp(ui = ui, server = server)
 ```
 
 The following show summary statistics for the percentage of visas approved by state, and a summary of the states with the higest and lowest approval rates. 
-
-It's difficult to see a pattern of the state approval rates. Both the maps and the summary show that there are states in both the highest and lowest from each region in the US. One interesting observation is that of the 8 states in which most workers start in the Fall, 5 are among the lost approval rates. 
 
 It's difficult to see a pattern the state approval rates. Both the maps and the summary show that there are states in both the highest and lowest from each region in the US. One interesting observation is that of the 8 states in which most workers start in the Fall, 5 are among the lowest approval rates. However, we were unable to find a reason that fall applications do so poorly. 
 
@@ -430,7 +428,6 @@ state_total %>%
   arrange(n)
 ```
 
-
 The Federal Office of Management and Budget splits the US into 10 regions, which are more specific than the 4 general regions we used in other parts of the project. In terms of occupation type, 2 of these regions, Region 8 (Colorado, Montana, North Dakota, South Dakota, Utah, Wyoming) and Region 1 (Connecticut, Maine, Massachusetts, New Hampshire, Rhode Island, Vermont) are significant. Every state in these regions, other than Colorado and Connecticut, has "Service" as it's most popular occupation type. There are only 4 other states in the US with this characteristic, and they are scattered through other regions. Generally, the states in this region are somewhat rural and remote, and have low population densities, which may play a role in the occupation type sought by employers for these visas. 
 
 The other 2 states with popular application types other than agriculture are Washington and Iowa. Washington is one of the US's largest producers of lumber, which may help explain why processing is the most popular job type in that state, although Oregon, the US's largest lumber state, does not share this characteristic. Iowa's most popular occupation is Structural Work, which focuses on construction, fabrication, and welding. 
@@ -456,7 +453,7 @@ state_wages %>%
 
 Overall the map shows interesting statistics about H2B visas by state. Agricultural work is the most popular in the vast majority of states. Most states also pay very low wages to these workers. Finally, workers in the majority of states start in the Spring. 
 
-```{r - bar graphs}
+```{r bar-graphs}
 ui <- fluidPage(
   titlePanel("H2B Visa Data"),
   sidebarLayout(
@@ -479,8 +476,6 @@ ui <- fluidPage(
       plotOutput(outputId = "bar_graph")
     )
   )
-
-  
 )
 
 server <- function(input, output) {
@@ -495,8 +490,7 @@ server <- function(input, output) {
 shinyApp(ui = ui, server = server)
 ```
 
-```{r - summary_statistics_bar_graphs}
-
+```{r summary-statistics-bar-graphs}
 h2b %>%
    count(case_status)
 
@@ -510,10 +504,17 @@ Another interesting observation is that most workers appear to be working in the
 
 ###Conclusions
 
-If we had more time, we would also include logistic regression to analyze the likelihood of an individual application being approved. This would allow us to set the dependent variable as a categorical one. We would also look at policies that relate to H2-B visas to find if there are any institutional reasons one visa application is more likely to be approved. 
+From this project, we learned a lot about the factors that affect H2B visa approval. Our linear model, visualizations, and summary statistics showed that region, occupational category, and season had significant effects on the percent of workers that were approved. The maps allowed us to break down differences on a state by state basis, while the bar graphs gave us an understanding of some of the bigger picture categories. We found that while regions played a role in explaining the differences in approval rates, subregions helped explain some of the other differences we found in the dataset. For example, we were able to find clusters of states within regions where service jobs were most popular rather than agricultural ones. We were also able to locate anomalous states like Washington, where processing is the most popular job type and workers are payed very high wages.
 
+For data analysis in this project we decided to focus mainly on shiny visualizations because they are interactive and allow users to explore the dataset on their own. However, they have some limitations. Because they can change in many ways, it's more difficult to make them specific. We found that some shiny visualizations were less visually appealing than others. If they were static visualizations, we could have made specific changes to these, but because on visualization covered many variables, it was difficult to adjust them. There were also small issues, like not being able to give more informative title and axis labels to the visualization because those things changed. 
+
+Additionally, we think that it would have been helpful to have annotations on our visualizations, especially the map, that pointed out their most interesting features, such as states with surprising characteristics. This is another feature that was difficult to implement in shiny. However, we do think that we were able to provide strong explanations in our written analysis after the visualizations. This allows the reader to perform their own explorations using the interactive features, and allows us to tell our narrative through writing and summary statistics.
 
 In terms of our dataset, there could be several things pertaining to the reliability and validity of our conclusions. As is the case in most large datasets, we had some NA values that we had to deal with. Since we combined data from several years, different years would sometimes have different columns, so we would get a lot of NA's as a result. We made do with what we had, but missing years of data could mean that changes from year to year were not represented as well. Another hurdle that we had to overcome with our data was the different wage units. Wages were mostly reported as hourly wages, but in some cases they were reported as monthly or yearly wages instead. Since there was no column reporting how many hours each worker worked, there was no way for us to standardize this data. Alas, when examining differences in wages, we chose to mainly foucs on the hourly data since that is what we had the most of to work with. Lastly we had some trouble working with the dates because they were not written in the same format each year. For example, some dates were written as 1/27/08 and others were written as 1-Jan-08. We eventually found a way to make things work, but it took us a while to get things correct. 
+
+Our statistical methods were appropriate because we had the entire population of applications in the time period, rather than a sample. As a result, we were able to use summary statistics, visualizations, and models, rather than hypothesis tests and confidence intervals. 
+
+If we had more time, we would also include logistic regression to analyze the likelihood of an individual application being approved. This would allow us to set the dependent variable as a categorical one, and that answers our research question more directly. Additionally, if we were to redo this project, we would also do more research into the economic conditions and policies that relate to H2-B visas to find if there are any institutional reasons one visa application is more likely to be approved. These statistics do not exist in a vacuum. Therefore, looking at the conditions in which this data was produced would provide useful context and lend our project better to real-world applications of our analyses. Moreover, with more time we could have also found data from more years, allowing us to look at trends over time.
 
 
 
