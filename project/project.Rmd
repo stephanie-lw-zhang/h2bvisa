@@ -278,10 +278,10 @@ h2b %>%
 
 In 2008, Congress failed to renew the Save Our Small and Seasonal Bussinesses Act (SOSSBA). This reduced the cap for the total number of H2B Visas that could be approved every year. 
 
-```{r - boxplot}
+```{r - box plot}
 h2b %>% 
   filter(case_status %in% c("CERTIFIED", "PARTIAL CERTIFIED", "DENIED")) %>%
-  filter(!is.na(basic_rate_of_pay) & !(is.na(basic_unit_of_pay)), basic_unit_of_pay == "HR", basic_rate_of_pay < 500) %>%
+  filter(!is.na(basic_rate_of_pay) & !(is.na(basic_unit_of_pay)), basic_unit_of_pay == "HR", basic_rate_of_pay < 100) %>%
   group_by(case_status) %>%
   ggplot(mapping = aes(x = case_status, y = basic_rate_of_pay, color = case_status)) +
   geom_boxplot() +
@@ -289,6 +289,8 @@ h2b %>%
        x = "Application Result",
        y = "Wage")
 ```
+
+We filtered out all hourly wages above 100 because we felt these were unreasonable and greatly skewed the plot.
 
 ```{r-mutate-prop-certified}
 h2b <- h2b %>%
