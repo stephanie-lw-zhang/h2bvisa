@@ -5,50 +5,66 @@ There are 31,422 observations in this data frame with 30 variables
 
 CODEBOOK:
 
-CASE_NO: The OFLC-assigned case number.
+case_no: The OFLC-assigned case number.
 
-DECISION_DATE : The date on which the Visa was granted or denied
+decision_date: The date on which the Visa was granted or denied
 
-NPC_SUBMITTED_DATE : The date the Visa application was submitted 
+npc_submitted_date: The date the Visa application was submitted 
 
-CASE_STATUS: The status of the case; typically a variation on "CERTIFIED", "DENIED", "WITHDRAWN", et cetera.
+case_status: The status of the case; typically a variation on "CERTIFIED", "DENIED", "WITHDRAWN", et cetera.
 
-ALIEN_WORK_STATE : The state in which the worker is trying to get a job
+alien_work_state: The state in which the worker is trying to get a job
 
-CERTIFICATION_BEGIN_DATE :  The date on which the worker is allowed to begin working
+certification_begin_date:  The date on which the worker is allowed to begin working
 
-CERTIFICATION_END_DATE : The date on which the worker's Visa expires
+certification_end_date: The date on which the worker's Visa expires
 
-EMPLOYER_CITY: The city the employer listed.
+employer_city: The city the employer listed.
 
-EMPLOYER_STATE: The state the employer listed.
+employer_state: The state the employer listed.
 
-EMPLOYER_POSTAL_CODE: The postal code the employer listed.
+employer_postal_code: The postal code the employer listed.
 
-AGENT_ATTORNEY_CITY: The city the agent or attorney listed
+agent_attorney_city: The city the agent or attorney listed
 
-AGENT_ATTORNEY_STATE: The state the agent or attorney listed
+agent_attorney_state: The state the agent or attorney listed
 
-JOB_TITLE: The job title listed by the employer.
+job_title: The job title listed by the employer.
 
-NBR_WORKERS_CERTIFIED: The number of workers/visas certified.
+nbr_workers_certified: The number of workers/visas certified.
 
-BASIC_RATE_OF_PAY : The basic rate of pay in dollars
+basic_rate_of_pay: The basic rate of pay in dollars
 
-BASIC_UNIT_OF_PAY : The time unit for which the basic rate of pay is allocated 
+basic_unit_of_pay: The time unit for which the basic rate of pay is allocated 
 
-DOT_OCCUPATIONAL_CODE : Job code
+dot_occupational_code: Job code
 
-NBR_WORKERS_REQUESTED: The number of workers/visas requested.
+nbr_workers_requested: The number of workers/visas requested.
 
-DOT_NAME : Name of job
+dot_name: Name of job
 
-SOC_CODE : Job category code
+soc_code: Job category code
 
-SOC_NAME : Job category
+soc_name: Job category
 
-PREVAILING_WAGE: Wage worker ends up actually receiving
+prevailing_wage: Wage worker ends up actually receiving
 
-PW_UNIT_OF_PAY:The time unit for which the prevailing wage is allocated
+pw_unit_of_pay: The time unit for which the prevailing wage is allocated
+
+
+Added Variables:
+
+wage_diff: difference between prevailing wage and baisc rate of pay
+
+decision_season: season in which visa status was decided
+
+submitted_season: season in which visa application was submitted
+
+start_season: season in which worker started working
+
+region: area of the United States employer is based in (N,S,E,W)
+
+occupation_category: general category that job falls into
+
 
 
