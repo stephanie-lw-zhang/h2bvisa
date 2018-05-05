@@ -49,7 +49,6 @@ h2b <- h2b %>%
 ### Introduction
 An H2-B visa is a temporary work visa for foreign workers with a job offer for seasonal, non-agricultural work in the United States. Employers from the United States must first submit temporary labor certification applications to the Department of Labor to allow H-2B workers to apply for visas. (Source: U.S. Citizenship and Immigration Services) The H2-B visa is especially important for industries with seasonal variations, such as landscaping and hospitality (Source: http://thehill.com/blogs/congress-blog/labor/269298-the-nation-needs-the-h2b-program). Small businesses rely on these temporary workers to keep their business running during peak times. However, not all applications for this visa are approved. Currently, H2-B visas are capped at 66,000 per fiscal year. (Source: https://www.uscis.gov/working-united-states/temporary-workers/h-2b-temporary-non-agricultural-workers). Through analyzing data provided by the Department of Labor's Office of Foreign Labor Certification, this project aims to find out what factors make applicants more likely to get successfully obtain H2-B visas. Specifically, this project looks at how job category, wage, season, region, and number of workers affects the likelihood of getting an H2-B visa application approved.
 
-Outline
 In this project, we produced visualizations to present the data in an accessible, digestible format. We created a visualization for each of the factors we are considering. Furthermore, we created a regression model to further analyze how the variables affect the likelihood of a case being approved. Finally, we created a shiny app so users can see the relationships between various factors. 
 
 
@@ -386,7 +385,11 @@ shinyApp(ui = ui, server = server)
 
 The following show summary statistics for the percentage of visas approved by state, and a summary of the states with the higest and lowest approval rates. 
 
+<<<<<<< HEAD
 It's difficult to see a pattern of the state approval rates. Both the maps and the summary show that there are states in both the highest and lowest from each region in the US. One interesting observation is that of the 8 states in which most workers start in the Fall, 5 are among the lost approval rates. 
+=======
+It's difficult to see a pattern the state approval rates. Both the maps and the summary show that there are states in both the highest and lowest from each region in the US. One interesting observation is that of the 8 states in which most workers start in the Fall, 5 are among the lowest approval rates. However, we were unable to find a reason that fall applications do so poorly. 
+>>>>>>> fffe2e959c6b348bb60b5e08e2933012ca6be836
 ```{r state-proportions}
 state_props %>%
   summarise(min = min(prop), 
@@ -415,7 +418,7 @@ state_total %>%
 ```
 
 
-The Federal Office of Management and Budget splits the US into 10 regions. In terms of occupation type, 2 of these regions, Region 8 (Colorado, Montana, North Dakota, South Dakota, Utah, Wyoming) and Region 1 (Connecticut, Maine, Massachusetts, New Hampshire, Rhode Island, Vermont). Every state in these regions, other than Colorado and Connecticut has "Service" as it's most popular occupation type. There are only 4 other states in the US with this characteristic, and they are scattered through other regions. Generally, the states in this region are somewhat rural and remote, and have low population densities, which may play a role in the occupation type sought by employers for these visas. 
+The Federal Office of Management and Budget splits the US into 10 regions, which are more specific than the 4 general regions we used in other parts of the project. In terms of occupation type, 2 of these regions, Region 8 (Colorado, Montana, North Dakota, South Dakota, Utah, Wyoming) and Region 1 (Connecticut, Maine, Massachusetts, New Hampshire, Rhode Island, Vermont) are significant. Every state in these regions, other than Colorado and Connecticut, has "Service" as it's most popular occupation type. There are only 4 other states in the US with this characteristic, and they are scattered through other regions. Generally, the states in this region are somewhat rural and remote, and have low population densities, which may play a role in the occupation type sought by employers for these visas. 
 
 The other 2 states with popular application types other than agriculture are Washington and Iowa. Washington is one of the US's largest producers of lumber, which may help explain why processing is the most popular job type in that state, although Oregon, the US's largest lumber state, does not share this characteristic. Iowa's most popular occupation is Structural Work, which focuses on construction, fabrication, and welding. 
 
