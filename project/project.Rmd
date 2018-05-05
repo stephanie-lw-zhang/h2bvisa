@@ -385,11 +385,10 @@ shinyApp(ui = ui, server = server)
 
 The following show summary statistics for the percentage of visas approved by state, and a summary of the states with the higest and lowest approval rates. 
 
-<<<<<<< HEAD
 It's difficult to see a pattern of the state approval rates. Both the maps and the summary show that there are states in both the highest and lowest from each region in the US. One interesting observation is that of the 8 states in which most workers start in the Fall, 5 are among the lost approval rates. 
-=======
+
 It's difficult to see a pattern the state approval rates. Both the maps and the summary show that there are states in both the highest and lowest from each region in the US. One interesting observation is that of the 8 states in which most workers start in the Fall, 5 are among the lowest approval rates. However, we were unable to find a reason that fall applications do so poorly. 
->>>>>>> fffe2e959c6b348bb60b5e08e2933012ca6be836
+
 ```{r state-proportions}
 state_props %>%
   summarise(min = min(prop), 
