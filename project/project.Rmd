@@ -247,21 +247,7 @@ h2b <- h2b %>%
 
 ```
 
-### Visualizations
-
-```{r map}
-state_props <- h2b %>%
-  filter(!is.na(nbur_workers_requested) & !(is.na(nbr_workers_certified))) %>%
-  filter(employer_state %in% state.abb | employer_state == "DC") %>%
-  filter(employer_state != "HI" & employer_state!="AK") %>%
-  mutate(region = case_when(employer_state %in% state.abb ~ tolower(setNames(state.name, state.abb))[employer_state], employer_state == "DC" ~ "district of columbia")) %>%
-  group_by(region) %>%
-  summarise(prop = sum(nbr_workers_certified) / sum(nbur_workers_requested))
-
-map <- merge(state_props, map_data("state"), sort = FALSE, by = "region")
-
-
-```
+### Initial Visualizations
 
 ```{r line-graph}
 h2b %>% 
@@ -294,28 +280,19 @@ h2b %>%
 
 We filtered out all hourly wages above 100 because we felt these were unreasonable and greatly skewed the plot. Those whose cases were certified has both the highest range and highest median wage, while those partially certified had the lowest spread and average median wage.
 
-### Linear Regression
+### Shiny Visualizations
 
-```{r mutate-prop-certified}
-h2b <- h2b %>%
-  mutate(prop_workers_certified = nbr_workers_certified/nbur_workers_requested) 
+```{r map-prop}
+state_props <- h2b %>%
+  filter(!is.na(nbur_workers_requested) & !(is.na(nbr_workers_certified))) %>%
+  filter(employer_state %in% state.abb | employer_state == "DC") %>%
+  filter(employer_state != "HI" & employer_state!="AK") %>%
+  mutate(region = case_when(employer_state %in% state.abb ~ tolower(setNames(state.name, state.abb))[employer_state], employer_state == "DC" ~ "district of columbia")) %>%
+  group_by(region) %>%
+  summarise(prop = sum(nbr_workers_certified) / sum(nbur_workers_requested))
+
+map <- merge(state_props, map_data("state"), sort = FALSE, by = "region")
 ```
-
-```{r backwards-selection}
-mod <- lm(prop_workers_certified ~ occupation_category + prevailing_wage + submitted_season + region + nbur_workers_requested, data = h2b)
-
-selected_mod <- step(mod, direction = "backward")
-
-(selected_mod)
-```
-
-Using backwards selection, we discovered that the number of workers requested was not a significant factor that determined the proportion of workers certified. Since case status is a categorical variable, the model predicts the proportion of workers certified for each visa application (a numerical variable) instead. In terms of which industries are most likely to get the H2-B visa approved, the model indicates that agricultural, fishery, forestry, and related (which counts as one occupational category) and processing approve the largest proportion of cases. On the other hand, visas for workers in professional, technical, and managerial work (which counts as one occupational category) are least likely to be approved. Relative to processing, a visa for a worker in a professional, technical, or managerial position is 21.69 percent less likely to be approved. This makes sense because processing and agricultural jobs are not desirable to American workers, so there is a labor shortage in these sectors. Furthermore, professional jobs are more sought after by Americans, and they are positions that don’t lend themselves as well to temporary work. Therefore, these jobs are not likely to be approved for a H2-B temporary visa.
-
-Additionally, visas submitted in the winter have the highest chance of certification, followed by fall, summer, and then spring.  Winter has a 10.37 higher percent chance of approval than spring. A reason for winter having the highest chance of approval could be because there is a high demand for labor during the spring, which is shown in the data, thus these applications for work in the spring are submitted during the winter.
-
-As for regional differences, visas submitted in the Northeast are mostly likely to be approved, followed by the South, the Midwest, and finally the West. Visas submitted in the Northeast is 5.18 percent more likely to be approved than the West.
-
-### Shiny
 
 ```{r map-wage}
 state_wages <- h2b %>%
@@ -507,7 +484,28 @@ We are also able to look more into seasonal trends. The most workers submit and 
 
 Another interesting observation is that most workers appear to be working in the South. When looking at most frequent job category, we see that most workers are working in the agricultural sector. Since the South produces a large portion of the country's agricultural goods, this makes sense that they would need to bring in seasonal workers to help with harvesting or planting food at different times. 
 
-### Conclusions
+### Linear Regression
+
+```{r mutate-prop-certified}
+h2b <- h2b %>%
+  mutate(prop_workers_certified = nbr_workers_certified/nbur_workers_requested) 
+```
+
+```{r backwards-selection}
+mod <- lm(prop_workers_certified ~ occupation_category + prevailing_wage + submitted_season + region + nbur_workers_requested, data = h2b)
+
+selected_mod <- step(mod, direction = "backward")
+
+(selected_mod)
+```
+
+Using backwards selection, we discovered that the number of workers requested was not a significant factor that determined the proportion of workers certified. Since case status is a categorical variable, the model predicts the proportion of workers certified for each visa application (a numerical variable) instead. In terms of which industries are most likely to get the H2-B visa approved, the model indicates that agricultural, fishery, forestry, and related (which counts as one occupational category) and processing approve the largest proportion of cases. On the other hand, visas for workers in professional, technical, and managerial work (which counts as one occupational category) are least likely to be approved. Relative to processing, a visa for a worker in a professional, technical, or managerial position is 21.69 percent less likely to be approved. This makes sense because processing and agricultural jobs are not desirable to American workers, so there is a labor shortage in these sectors. Furthermore, professional jobs are more sought after by Americans, and they are positions that don’t lend themselves as well to temporary work. Therefore, these jobs are not likely to be approved for a H2-B temporary visa.
+
+Additionally, visas submitted in the winter have the highest chance of certification, followed by fall, summer, and then spring.  Winter has a 10.37 higher percent chance of approval than spring. A reason for winter having the highest chance of approval could be because there is a high demand for labor during the spring, which is shown in the data, thus these applications for work in the spring are submitted during the winter.
+
+As for regional differences, visas submitted in the Northeast are mostly likely to be approved, followed by the South, the Midwest, and finally the West. Visas submitted in the Northeast is 5.18 percent more likely to be approved than the West.
+
+### Conclusion
 
 From this project, we learned a lot about the factors that affect H2B visa approval. Our linear model, visualizations, and summary statistics showed that region, occupational category, and season had significant effects on the percent of workers that were approved. The maps allowed us to break down differences on a state by state basis, while the bar graphs gave us an understanding of some of the bigger picture categories. We found that while regions played a role in explaining the differences in approval rates, subregions helped explain some of the other differences we found in the dataset. For example, we were able to find clusters of states within regions where service jobs were most popular rather than agricultural ones. We were also able to locate anomalous states like Washington, where processing is the most popular job type and workers are payed very high wages.
 
