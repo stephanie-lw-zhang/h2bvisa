@@ -43,7 +43,12 @@ h2b <- h2b2008 %>%
   full_join(h2b2012)
 
 h2b <- h2b %>%
-  select(year, CASE_NO, DECISION_DATE, NPC_SUBMITTED_DATE, CASE_STATUS, ALIEN_WORK_STATE, CERTIFICATION_BEGIN_DATE, CERTIFICATION_END_DATE, EMPLOYER_CITY, EMPLOYER_STATE, EMPLOYER_POSTAL_CODE, AGENT_ATTORNEY_CITY, AGENT_ATTORNEY_STATE, JOB_TITLE, NBR_WORKERS_CERTIFIED, PREVAILING_WAGE, PW_UNIT_OF_PAY, BASIC_RATE_OF_PAY, BASIC_UNIT_OF_PAY, DOT_OCCUPATIONAL_CODE, NBR_WORKERS_REQUESTED, DOT_NAME, SOC_CODE, SOC_NAME)
+  select(year, CASE_NO, DECISION_DATE, NPC_SUBMITTED_DATE, CASE_STATUS, 
+         ALIEN_WORK_STATE, CERTIFICATION_BEGIN_DATE, CERTIFICATION_END_DATE, 
+         EMPLOYER_CITY, EMPLOYER_STATE, EMPLOYER_POSTAL_CODE, AGENT_ATTORNEY_CITY, 
+         AGENT_ATTORNEY_STATE, JOB_TITLE, NBR_WORKERS_CERTIFIED, PREVAILING_WAGE, 
+         PW_UNIT_OF_PAY, BASIC_RATE_OF_PAY, BASIC_UNIT_OF_PAY, DOT_OCCUPATIONAL_CODE, 
+         NBR_WORKERS_REQUESTED, DOT_NAME, SOC_CODE, SOC_NAME)
 ```
 
 ### Introduction
@@ -80,21 +85,23 @@ h2b <- h2b %>%
          soc_name = SOC_NAME)
 
 h2b <- h2b %>%
-  select(year, case_no, decision_date, npc_submitted_date, case_status, alien_work_state, certification_begin_date, certification_end_date, employer_city, employer_state, employer_postal_code, agent_attorney_city, agent_attorney_state, job_title, nbr_workers_certified, prevailing_wage, pw_unit_of_pay, basic_rate_of_pay, basic_unit_of_pay, dot_occupational_code, nbur_workers_requested, dot_name, soc_code, soc_name)
+  select(year, case_no, decision_date, npc_submitted_date, case_status, alien_work_state, 
+         certification_begin_date, certification_end_date, employer_city, employer_state, 
+         employer_postal_code, agent_attorney_city, agent_attorney_state, job_title, 
+         nbr_workers_certified, prevailing_wage, pw_unit_of_pay, basic_rate_of_pay, 
+         basic_unit_of_pay, dot_occupational_code, nbur_workers_requested, dot_name, soc_code, 
+         soc_name)
 
 ```
 
 
-```{r muate-benefits}
-
+```{r mutate-benefits}
 h2b <- h2b %>%
   mutate(wage_diff = case_when(
   prevailing_wage > basic_rate_of_pay ~ "prevail_higher",
   prevailing_wage == basic_rate_of_pay ~ "same",
   prevailing_wage < basic_rate_of_pay ~ "basic_higher"
   ))
-  
-
 ```
 
 
@@ -224,10 +231,24 @@ h2b <- h2b %>%
 ```{r mutate-region}
 h2b <- h2b %>%
   mutate(region = case_when(
-    employer_state == "WA" | employer_state == "OR" | employer_state == "CA" |  employer_state == "ID" | employer_state == "MT" | employer_state == "WY" | employer_state == "NV" | employer_state == "UT" | employer_state == "CO" | employer_state == "AZ" | employer_state == "NM" | employer_state == "AK" | employer_state == "HI" ~ "West",
-    employer_state == "ND" | employer_state == "SD" | employer_state == "NE" | employer_state == "KS" | employer_state == "MN" | employer_state == "IA" | employer_state == "MO" | employer_state == "WI" | employer_state == "IL" | employer_state == "MI" | employer_state == "IN" | employer_state == "OH" ~ "Midwest",
-    employer_state == "TX" | employer_state == "OK" | employer_state == "AR" | employer_state == "LA" | employer_state == "MS" | employer_state == "AL" | employer_state == "TN" | employer_state == "KY" | employer_state == "WV" | employer_state == "MD" | employer_state == "DE" | employer_state == "VA" | employer_state == "NC" | employer_state == "SC" | employer_state == "GA" | employer_state == "FL" ~ "South",
-    employer_state == "ME" | employer_state == "NH" | employer_state == "VT" | employer_state == "MA" | employer_state == "CT" | employer_state == "RI" | employer_state == "NJ" | employer_state == "NY" | employer_state == "PA" ~ "Northeast"
+    employer_state == "WA" | employer_state == "OR" | employer_state == "CA" |  
+      employer_state == "ID" | employer_state == "MT" | employer_state == "WY" | 
+      employer_state == "NV" | employer_state == "UT" | employer_state == "CO" | 
+      employer_state == "AZ" | employer_state == "NM" | employer_state == "AK" | 
+      employer_state == "HI" ~ "West",
+    employer_state == "ND" | employer_state == "SD" | employer_state == "NE" | 
+      employer_state == "KS" | employer_state == "MN" | employer_state == "IA" | 
+      employer_state == "MO" | employer_state == "WI" | employer_state == "IL" | 
+      employer_state == "MI" | employer_state == "IN" | employer_state == "OH" ~ "Midwest",
+    employer_state == "TX" | employer_state == "OK" | employer_state == "AR" | 
+      employer_state == "LA" | employer_state == "MS" | employer_state == "AL" | 
+      employer_state == "TN" | employer_state == "KY" | employer_state == "WV" | 
+      employer_state == "MD" | employer_state == "DE" | employer_state == "VA" | 
+      employer_state == "NC" | employer_state == "SC" | employer_state == "GA" | 
+      employer_state == "FL" ~ "South",
+    employer_state == "ME" | employer_state == "NH" | employer_state == "VT" | 
+      employer_state == "MA" | employer_state == "CT" | employer_state == "RI" | 
+      employer_state == "NJ" | employer_state == "NY" | employer_state == "PA" ~ "Northeast"
   ))
 ```
 
@@ -269,7 +290,8 @@ In 2008, Congress failed to renew the Save Our Small and Seasonal Bussinesses Ac
 ```{r box-plot}
 h2b %>% 
   filter(case_status %in% c("CERTIFIED", "PARTIAL CERTIFIED", "DENIED")) %>%
-  filter(!is.na(basic_rate_of_pay) & !(is.na(basic_unit_of_pay)), basic_unit_of_pay == "HR", basic_rate_of_pay < 100) %>%
+  filter(!is.na(basic_rate_of_pay) & !(is.na(basic_unit_of_pay)), 
+         basic_unit_of_pay == "HR", basic_rate_of_pay < 100) %>%
   group_by(case_status) %>%
   ggplot(mapping = aes(x = case_status, y = basic_rate_of_pay, color = case_status)) +
   geom_boxplot() +
@@ -287,7 +309,8 @@ state_props <- h2b %>%
   filter(!is.na(nbur_workers_requested) & !(is.na(nbr_workers_certified))) %>%
   filter(employer_state %in% state.abb | employer_state == "DC") %>%
   filter(employer_state != "HI" & employer_state!="AK") %>%
-  mutate(region = case_when(employer_state %in% state.abb ~ tolower(setNames(state.name, state.abb))[employer_state], employer_state == "DC" ~ "district of columbia")) %>%
+  mutate(region = case_when(employer_state %in% state.abb ~ 
+                              tolower(setNames(state.name, state.abb))[employer_state], employer_state == "DC" ~ "district of columbia")) %>%
   group_by(region) %>%
   summarise(prop = sum(nbr_workers_certified) / sum(nbur_workers_requested))
 
@@ -300,7 +323,8 @@ state_wages <- h2b %>%
   filter(employer_state %in% state.abb | employer_state == "DC") %>%
   filter(employer_state != "HI" & employer_state!="AK") %>%
   filter(basic_unit_of_pay == "HR") %>%
-  mutate(region = case_when(employer_state %in% state.abb ~ tolower(setNames(state.name, state.abb))[employer_state], employer_state == "DC" ~ "district of columbia")) %>%
+  mutate(region = case_when(employer_state %in% state.abb ~ 
+                              tolower(setNames(state.name, state.abb))[employer_state], employer_state == "DC" ~ "district of columbia")) %>%
   group_by(region) %>%
   summarise(median_wage = median(basic_rate_of_pay))
 
@@ -312,7 +336,8 @@ state_occ <- h2b %>%
   filter(!is.na(occupation_category)) %>%
   filter(employer_state %in% state.abb | employer_state == "DC") %>%
   filter(employer_state != "HI" & employer_state!="AK") %>%
-  mutate(region = case_when(employer_state %in% state.abb ~ tolower(setNames(state.name, state.abb))[employer_state], employer_state == "DC" ~ "district of columbia")) %>% 
+  mutate(region = case_when(employer_state %in% state.abb ~ 
+                              tolower(setNames(state.name, state.abb))[employer_state], employer_state == "DC" ~ "district of columbia")) %>% 
    group_by(region) %>%
    count(region, occupation_category) %>%
   slice(which.max(n))
@@ -326,7 +351,8 @@ state_season <- h2b %>%
   filter(!is.na(start_season)) %>%
   filter(employer_state %in% state.abb | employer_state == "DC") %>%
   filter(employer_state != "HI" & employer_state!="AK") %>%
-  mutate(region = case_when(employer_state %in% state.abb ~ tolower(setNames(state.name, state.abb))[employer_state], employer_state == "DC" ~ "district of columbia")) %>% 
+  mutate(region = case_when(employer_state %in% state.abb ~ 
+                              tolower(setNames(state.name, state.abb))[employer_state], employer_state == "DC" ~ "district of columbia")) %>% 
    group_by(region) %>%
    count(region, start_season) %>%
   slice(which.max(n))
@@ -338,7 +364,8 @@ map <- merge(state_season, map, sort = FALSE, by = "region")
 state_total <- h2b %>%
   filter(employer_state %in% state.abb | employer_state == "DC") %>%
   filter(employer_state != "HI" & employer_state!="AK") %>%
-  mutate(region = case_when(employer_state %in% state.abb ~ tolower(setNames(state.name, state.abb))[employer_state], employer_state == "DC" ~ "district of columbia")) %>% 
+  mutate(region = case_when(employer_state %in% state.abb ~ 
+                              tolower(setNames(state.name, state.abb))[employer_state], employer_state == "DC" ~ "district of columbia")) %>% 
    group_by(region) %>%
    summarise(n = n())
 
@@ -367,7 +394,8 @@ ui <- fluidPage(
 server <- function(input, output) {
   output$map <- renderPlot({
   ggplot(data = map) + 
-  geom_polygon(aes_string(x = "long", y = "lat", group = "group", fill = input$fill), color = "white") +
+  geom_polygon(aes_string(x = "long", y = "lat", group = "group", 
+                          fill = input$fill), color = "white") +
   coord_fixed(1.5) + 
   labs(
        x = "Longitude",
@@ -462,7 +490,8 @@ ui <- fluidPage(
 
 server <- function(input, output) {
   output$bar_graph <- renderPlot({
-    ggplot(data = h2b %>% filter(case_status != "WITHDRAWN" & case_status != "FINAL REVIEW"), mapping = aes_string(x = input$category, fill = input$fill)) +
+    ggplot(data = h2b %>% filter(case_status != "WITHDRAWN" & case_status != "FINAL REVIEW"), 
+           mapping = aes_string(x = input$category, fill = input$fill)) +
       geom_bar() + theme_minimal() + 
       labs(x=input$category, y="Count") + 
       coord_flip()
@@ -492,7 +521,8 @@ h2b <- h2b %>%
 ```
 
 ```{r backwards-selection}
-mod <- lm(prop_workers_certified ~ occupation_category + prevailing_wage + submitted_season + region + nbur_workers_requested, data = h2b)
+mod <- lm(prop_workers_certified ~ occupation_category + prevailing_wage + submitted_season + 
+            region + nbur_workers_requested, data = h2b)
 
 selected_mod <- step(mod, direction = "backward")
 
