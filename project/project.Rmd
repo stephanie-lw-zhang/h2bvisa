@@ -290,7 +290,7 @@ h2b %>%
        y = "Wage")
 ```
 
-We filtered out all hourly wages above 100 because we felt these were unreasonable and greatly skewed the plot.
+We filtered out all hourly wages above 100 because we felt these were unreasonable and greatly skewed the plot. Those whose cases were certified has both the highest range and highest median wage, while those partially certified had the lowest spread and average median wage.
 
 ```{r-mutate-prop-certified}
 h2b <- h2b %>%
